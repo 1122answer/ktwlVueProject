@@ -1,0 +1,43 @@
+{
+    "code": 0,
+    "success": true,
+    "data":{
+        "totalCount": 3,
+        "pageSize": 12,
+        "pageNo": 1,
+        "result": [
+        {
+            "roleId": "40289981644a562b01644a576c4e0000",
+            "name": "系统管理员",
+            "remark": "系统管理员",
+            "createUserId": "gg",
+            "createTime": "2018-07-12 03:40:55",
+            "modifyUserId": "gg",
+            "modifyTime": "2018-07-03 09:55:58",
+            "enabled": false,
+            "deleted": false
+        },
+        {
+            "roleId": "40289981644a562b01644a57ad570001",
+            "name": "机构管理员",
+            "remark": "机构管理员",
+            "createUserId": "string",
+            "createTime": "2018-06-29 15:00:17",
+            "modifyUserId": "string",
+            "modifyTime": "2018-06-29 15:00:17",
+            "enabled": false,
+            "deleted": false
+        },
+        {
+            "roleId": "40289981644a562b01644a57eaa70002",
+            "name": "开发人员",
+            "remark": "开发人员",
+            "createUserId": "string",
+            "createTime": "2018-06-29 15:00:33",
+            "modifyUserId": "string",
+            "modifyTime": "2018-06-29 15:00:33",
+            "enabled": false,
+            "deleted": false
+        }]
+    }
+}

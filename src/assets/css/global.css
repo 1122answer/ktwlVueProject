@@ -1,0 +1,49 @@
+.box-border {
+    border: 1px solid #e9e9e9;
+    border-radius: 3px;
+    min-height: 200px;
+    padding: 20px 12px;
+    min-width: 800px;
+}
+.text-center {
+    text-align: center !important;
+}
+.ant-table-small{
+    border:none!important;
+}
+/* 设置弹窗的最大高度 */
+.widgetWrap {
+    max-height: 520px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+/*滚动条样式*/
+.widgetWrap::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 4px;
+    /*高宽分别对应横竖滚动条的尺寸*/
+    height: 4px;
+}
+.widgetWrap::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+}
+.widgetWrap::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+}
+.ant-modal-content .ant-form-item{margin-bottom: 18px;}
+.ant-menu-inline .ant-menu-submenu-title{
+    font-size: 14px;
+    font-weight: 700;
+}
+h1{
+    font-size: 18px!important;
+}
+.moduleWrap{height: 100%;}   /*模块的外层*/
+.moduleWrap .box-border{height: calc(100% - 48px);}
+.moduleWrap .box-border .container-fluid{overflow-y: auto;}
