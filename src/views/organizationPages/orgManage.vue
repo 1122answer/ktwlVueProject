@@ -1,63 +1,59 @@
 <template>
-    <div id="orgManage">
-        <v-row class="padding-bottom-10">
+    <div id="orgManage" class="moduleWrap">
+        <v-row class="nav-header">
             <v-col span="12">
                 <h1>机构管理</h1>
             </v-col>
             <v-col span="12">
-                <v-breadcrumb class="pull-right" :style="{ 'line-height': '38px'}">
+                <v-breadcrumb class="pull-right" :style="{ 'line-height': '30px'}">
                     <v-breadcrumb-item>首页</v-breadcrumb-item>
                     <v-breadcrumb-item>组织机构</v-breadcrumb-item>
                     <v-breadcrumb-item>机构管理</v-breadcrumb-item>
                 </v-breadcrumb>
             </v-col>
         </v-row>
-        <div class="box-border padding-10">
-            <div class="clearfix padding-bottom-5">
-                <div class="list-org-box">
-                    <v-row :gutter="16">
-                        <v-col span="4">
-                            <v-select search :style="{width:'100%'}" :data="selectOrgType" size="lg" placeholder="请选择机构类型" v-model="searchOrgTypeId"></v-select>
-                        </v-col>
-                        <v-col span="6">
-                            <v-input-group compact>
-                                <v-input placeholder="请输入机构名称" size="large" :style="{width:'64%'}" v-model="searchName"></v-input>
-                                <v-button type="primary" size="large" @click="searchTable">
-                                    <v-icon type="search"></v-icon> 查询</v-button>
-                            </v-input-group>
-                        </v-col>
-                        <v-col span="10" class="pull-right text-right">
-                            <v-button type="primary" size="large" class="margin-right-5" @click="addOrgBrief">
-                                <v-icon type="plus"></v-icon> 添加机构</v-button>
-                        </v-col>
-                    </v-row>
-                    <v-data-table :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" class="margin-top-15" bordered ref="orgTable" emptyText="暂时找不到你要的信息......">
-                        <template slot="td" slot-scope="props">
-                            <div v-if="props.column.field=='operation'" class="text-center">
-                                <v-button-group>
-                                    <v-button type="success" title="绑定角色" @click="bindRole(props.item)">
-                                        <v-icon type="solution"></v-icon>
-                                    </v-button>
-                                    <v-button type="info" title="查看机构信息" @click="orgInfoViewShow(props.item)">
-                                        <v-icon type="file-text"></v-icon>
-                                    </v-button>
-                                    <v-button type="primary" title="编辑机构" @click="editOrgBrief(props.item)">
-                                        <v-icon type="edit"></v-icon>
-                                    </v-button>
-                                    <v-button type="error" title="删除机构" @click="delOrgWid(props.item)">
-                                        <v-icon type="delete"></v-icon>
-                                    </v-button>
-                                </v-button-group>
-                            </div>
-                            <span v-else v-html="props.content"></span>
-                        </template>
-                    </v-data-table>
-                </div>
-                <OrgWidget :is-org="orgShow" @ok="hideOrgOk" @cancel="hideOrgDialog"></OrgWidget>
-                <BindOrgRole :visible="orgBeal" @ok="orgOk" @cancel="orgCancel"></BindOrgRole>
-                <OrgInfoView :visible="orgInfoView" @cancel="orgInfoViewCancel"></OrgInfoView>
+        <div class="box-border" ref="boxBorder">
+            <div ref="morePanelWrap">
+                <v-more-panel>
+                    <v-form slot="form">
+                        <v-form-item>
+                            <v-select search :style="{width:'200px'}" :data="selectOrgType" size="lg" placeholder="请选择机构类型" v-model="searchOrgTypeId"></v-select>
+                        </v-form-item>
+                        <v-form-item>
+                                <v-input placeholder="请输入机构名称" size="large" :style="{width:'200px'}" v-model="searchName"></v-input>
+                        </v-form-item>
+                    </v-form>
+                    <v-button type="primary" size="large" @click="searchTable" slot="control"><v-icon type="search"></v-icon> 查询</v-button>
+                    <v-button type="primary" class="pull-right" @click="addOrgBrief" size="large"><v-icon type="plus"></v-icon> 添加机构</v-button>
+                </v-more-panel>
+            </div>
+            <div class="container-fluid" ref="containerFluid">
+                <v-data-table :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" bordered ref="orgTable" emptyText="暂时找不到你要的信息......" :height="tableBoxHeight">
+                    <template slot="td" slot-scope="props">
+                        <div v-if="props.column.field=='operation'" class="text-center">
+                            <v-button-group>
+                                <v-button type="success" title="绑定角色" @click="bindRole(props.item)">
+                                    <v-icon type="solution"></v-icon>
+                                </v-button>
+                                <v-button type="info" title="查看机构信息" @click="orgInfoViewShow(props.item)">
+                                    <v-icon type="file-text"></v-icon>
+                                </v-button>
+                                <v-button type="primary" title="编辑机构" @click="editOrgBrief(props.item)">
+                                    <v-icon type="edit"></v-icon>
+                                </v-button>
+                                <v-button type="error" title="删除机构" @click="delOrgWid(props.item)">
+                                    <v-icon type="delete"></v-icon>
+                                </v-button>
+                            </v-button-group>
+                        </div>
+                        <span v-else v-html="props.content"></span>
+                    </template>
+                </v-data-table>
             </div>
         </div>
+        <OrgWidget :is-org="orgShow" @ok="hideOrgOk" @cancel="hideOrgDialog"></OrgWidget>
+        <BindOrgRole :visible="orgBeal" @ok="orgOk" @cancel="orgCancel"></BindOrgRole>
+        <OrgInfoView :visible="orgInfoView" @cancel="orgInfoViewCancel"></OrgInfoView>
     </div>
 </template>
 <script>
@@ -81,9 +77,16 @@ export default {
             selectOrgType: state => state.orgAddEditModule.selectRegionList
         })
     },
-    mounted() {},
+    mounted() {
+        //给table限制最大高度
+            this.$nextTick(() => {
+                let tableBoxHeight = this.$refs.boxBorder.scrollHeight - (this.$refs.morePanelWrap.scrollHeight + 25);
+                this.tableBoxHeight = tableBoxHeight;
+            });
+    },
     data: function() {
         return {
+            tableBoxHeight:300,
             searchOrgTypeId: "",
             searchName: "",
             orgBeal: false, //绑定角色
@@ -184,7 +187,7 @@ export default {
                 this.orgBeal = true;
             });
         },
-        orgInfoViewShow(param) {  //查看机构
+        orgInfoViewShow(param) { //查看机构
             console.log(param)
             this.$store.dispatch("orgInfoViewModule/fetchOrgType", param.orgTypeId).then(result => {
                 if (result) {
@@ -207,16 +210,19 @@ export default {
 .demo-table tr td {
     line-height: 24px;
 }
+
 li.ant-dropdown-menu-item {
     display: block;
     width: 68px;
     text-align: center;
 }
+
 a.handle-tip {
     color: #333;
     display: inline-block;
     line-height: 24px;
 }
+
 a.handle-tip:hover {
     color: #108ee9;
 }

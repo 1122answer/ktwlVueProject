@@ -1,6 +1,6 @@
 <template>
     <div id="addEditProject">
-        <v-modal title="添加项目信息" :visible="isProject" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag">
+        <v-modal title="添加项目信息" :visible="isProject" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag" :maskClosable="false">
             <span class="zoomFull" @click="zoomFullClick"><v-icon type="scan" v-show="fullIcon" title="全屏"></v-icon><v-icon type="switcher" v-show="exitIcon" title="退出全屏"></v-icon></span>
             <div :style="entHeight">
                 <v-form direction="horizontal" :model="projectForm" :rules="rules" ref="projectForm">

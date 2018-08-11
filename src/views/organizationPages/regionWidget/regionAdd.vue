@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="新增" :visible="visible" :confirmLoading="regionbutstate" @ok="handleOk" @cancel="handleCancel" :width="700">
+    <v-modal title="新增" :visible="visible" :confirmLoading="regionbutstate" @ok="handleOk" @cancel="handleCancel" :width="700" :maskClosable="false">
         <v-form direction="horizontal" :model="regionForm" :rules="rules" ref="regionForm">
              <v-row>
                 <v-col span="11">

@@ -1,6 +1,6 @@
 <template>
     <div id="addDicDiag">
-        <v-modal title="字典信息" :visible="true"  v-show="isDic" :width="1050" @ok="addOk" @cancel="addCancel">
+        <v-modal title="字典信息" :visible="true"  v-show="isDic" :width="1050" @ok="addOk" @cancel="addCancel" :maskClosable="false">
             <subDic :visible="newDic" :width="900" @ok="dicOk" @cancel="dicCancel"></subDic>
             <v-form direction="horizontal" :model="adddicForm" :rules="rules" ref="adddicForm">
                 <v-row>

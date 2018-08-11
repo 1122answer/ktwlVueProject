@@ -1,6 +1,6 @@
 <template>
     <div id="orgInfoShow">
-        <v-modal title="机构信息" :visible="visible" @cancel="handleCancel" :width="1050">
+        <v-modal title="机构信息" :visible="visible" @cancel="handleCancel" :width="1050" :maskClosable="false">
             <v-form direction="horizontal" :model="orgViewForm" ref="orgViewForm">
                 <v-row>
                     <v-col span='8'>

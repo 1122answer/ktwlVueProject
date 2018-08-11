@@ -1,6 +1,6 @@
 <template>
 	<!-- 添加弹框 -->
-	<v-modal title="新增角色" :visible="visible" :confirmLoading="rolebutstate" @ok="handleOk" @cancel="handleCancel">
+	<v-modal title="新增角色" :visible="visible" :confirmLoading="rolebutstate" @ok="handleOk" @cancel="handleCancel" :maskClosable="false">
 		<v-form direction="horizontal" :model="roleForm" :rules="rules" ref="roleForm">
 			<v-form-item label="角色名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="name" has-feedback>
 				<v-input placeholder="请输入角色名称" size="large" v-model="roleForm.name"></v-input>

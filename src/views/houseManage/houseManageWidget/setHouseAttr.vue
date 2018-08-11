@@ -1,6 +1,6 @@
 <template>
     <div id="setHouseAttr">
-        <v-modal title="指定房屋属性" :visible="isSethouse" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag">
+        <v-modal title="指定房屋属性" :visible="isSethouse" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag" :maskClosable="false">
             <span class="zoomFull" @click="zoomFullClick"><v-icon type="scan" v-show="fullIcon" title="全屏"></v-icon><v-icon type="switcher" v-show="exitIcon" title="退出全屏"></v-icon></span>
             <div :style="entHeight">
                 <v-form direction="horizontal" :model="setHouseForm" :rules="rules" ref="setHouseForm">

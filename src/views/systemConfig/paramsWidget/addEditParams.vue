@@ -19,10 +19,10 @@
                 <v-col span='12'>
                     <v-form-item label="分组名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="groupId">
                         <span v-if="addFlag == 1">{{paramConfigForm.groupName}}</span>
-                        <v-select v-model="paramConfigForm.groupId" placeholder="请选择分组" notfound="无法找到" :data="groupData" size="lg" label="label" :optionOnChange="true" @change="groupChange"  v-else></v-select>
+                        <v-select v-model="paramConfigForm.groupId" placeholder="请选择分组" notfound="无法找到" :data="groupData" size="lg" label="label" :optionOnChange="true" @change="groupChange" v-else></v-select>
                     </v-form-item>
                 </v-col>
-            <!--     <v-col span='12'>
+                <!-- <v-col span='12'>
                     <v-form-item label="分组编号" :label-col="labelCol" :wrapper-col="wrapperCol" prop="groupId">
                         <span>{{paramConfigForm.groupId}}</span>
                     </v-form-item>
@@ -105,139 +105,126 @@
         </div>
     </v-modal>
 </template>
-
 <script>
 import { mapState } from "vuex";
 
 export default {
-  props: ["visible"],
-  components: {
-    //addPane
-  },
-  computed: {
-    ...mapState({
-      titleName: state => state.prsAddEditModule.titleName,
-      addFlag: state => state.prsAddEditModule.addFlag,
-      paramConfigForm: state => state.prsAddEditModule.paramConfigForm,
-      modifyTypeData: state => state.prsAddEditModule.selectModifyType,
-      modifyTypeText: state => state.prsAddEditModule.modifyTypeText,
-      modifyTypeValue: state => state.prsAddEditModule.modifyTypeValue,
-      systemData: state => state.prsAddEditModule.selectSystem,
-      regionData: state => state.prsAddEditModule.selectRegion,
-      groupData: state => state.prsAddEditModule.selectGroup
-    })
-  },
-  mounted() {},
-  data: function() {
-    return {
-      rolebutstate: false,
-      labelCol: { span: 8 },
-      wrapperCol: { span: 14 },
-      rules: {
-        groupId: [
-          {
-            required: true,
-            message: "请选择分组名称"
-          }
-        ],
+    props: ["visible"],
+    components: {
+        //addPane
+    },
+    computed: {
+        ...mapState({
+            titleName: state => state.prsAddEditModule.titleName,
+            addFlag: state => state.prsAddEditModule.addFlag,
+            paramConfigForm: state => state.prsAddEditModule.paramConfigForm,
+            modifyTypeData: state => state.prsAddEditModule.selectModifyType,
+            modifyTypeText: state => state.prsAddEditModule.modifyTypeText,
+            modifyTypeValue: state => state.prsAddEditModule.modifyTypeValue,
+            systemData: state => state.prsAddEditModule.selectSystem,
+            regionData: state => state.prsAddEditModule.selectRegion,
+            groupData: state => state.prsAddEditModule.selectGroup
+        })
+    },
+    mounted() {},
+    data: function() {
+        return {
+            rolebutstate: false,
+            labelCol: { span: 8 },
+            wrapperCol: { span: 14 },
+            rules: {
+                groupId: [{
+                    required: true,
+                    message: "请选择分组名称"
+                }],
 
-        configName: [
-          {
-            required: true,
-            message: "请填写参数名称"
-          }
-        ],
-        configKey: [
-          {
-            required: true,
-            message: "请填写参数编号"
-          }
-        ],
-        configValue: [
-          {
-            required: true,
-            message: "请选择参数值"
-          }
-        ],
-        configDesc: [
-          {
-            required: true,
-            message: "请输入参数说明"
-          }
-        ],
-        modifyType: [
-          {
-            required: true,
-            message: "请输入参数说明"
-          }
-        ]
-      }
-    };
-  },
-  methods: {
-    ok() {
-      if (this.addFlag == 1) {
-        this.$store.commit("prsAddEditModule/ADD_EDIT_FLAG", 3);
-      } else {
-        // this.$emit("ok");
-        this.$refs.paramConfigForm.validate(valid => {
-          if (valid) {
-            this.rolebutstate = true;
-            // 添加模块
-            if (this.addFlag == 2) {
-              this.$store.dispatch("prsAddEditModule/addSaveData").then(res => {
-                this.rolebutstate = false;
-                if (res.data && res.data.success) {
-                  this.$message.success("添加成功");
-                  this.$emit("ok");
-                  this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
-                }
-              });
-            } else if (this.addFlag == 3) {
-              // 编辑模块
-              this.$store
-                .dispatch("prsAddEditModule/editSaveData")
-                .then(res => {
-                  this.rolebutstate = false;
-                  /*console.log(res)*/
-                  if (res.data && res.data.success) {
-                    this.$message.success(res.data.data, 1);
-                    this.$emit("ok");
-                    this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
-                  }
+                configName: [{
+                    required: true,
+                    message: "请填写参数名称"
+                }],
+                configKey: [{
+                    required: true,
+                    message: "请填写参数编号"
+                }],
+                configValue: [{
+                    required: true,
+                    message: "请选择参数值"
+                }],
+                configDesc: [{
+                    required: true,
+                    message: "请输入参数说明"
+                }],
+                modifyType: [{
+                    required: true,
+                    message: "请输入参数说明"
+                }]
+            }
+        };
+    },
+    methods: {
+        ok() {
+            if (this.addFlag == 1) {
+                this.$store.commit("prsAddEditModule/ADD_EDIT_FLAG", 3);
+            } else {
+                // this.$emit("ok");
+                this.$refs.paramConfigForm.validate(valid => {
+                    if (valid) {
+                        this.rolebutstate = true;
+                        // 添加模块
+                        if (this.addFlag == 2) {
+                            this.$store.dispatch("prsAddEditModule/addSaveData").then(res => {
+                                this.rolebutstate = false;
+                                if (res.data && res.data.success) {
+                                    this.$message.success("添加成功");
+                                    this.$emit("ok");
+                                    this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
+                                }
+                            });
+                        } else if (this.addFlag == 3) {
+                            // 编辑模块
+                            this.$store
+                                .dispatch("prsAddEditModule/editSaveData")
+                                .then(res => {
+                                    this.rolebutstate = false;
+                                    /*console.log(res)*/
+                                    if (res.data && res.data.success) {
+                                        this.$message.success(res.data.data, 1);
+                                        this.$emit("ok");
+                                        this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
+                                    }
+                                });
+                        }
+                    }
                 });
             }
-          }
-        });
-      }
-    },
-    cancel() {
-      this.rolebutstate = false;
-      this.$emit("cancel");
-      this.$refs["paramConfigForm"].resetFields();
-      this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
-    },
-    modifyTypeChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_MODIFYTYPE_DATA", optData);
-      }
-    },
-    systemChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_SYSTEM_DATA", optData);
-      }
-    },
-    regionChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_REGION_DATA", optData);
-      }
-    },
-    groupChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_GROUP_DATA", optData);
-      }
+        },
+        cancel() {
+            this.rolebutstate = false;
+            this.$emit("cancel");
+            this.$refs["paramConfigForm"].resetFields();
+            this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
+        },
+        modifyTypeChange(optData) {
+            if (optData) {
+                this.$store.commit("prsAddEditModule/UPDATE_MODIFYTYPE_DATA", optData);
+            }
+        },
+        systemChange(optData) {
+            if (optData) {
+                this.$store.commit("prsAddEditModule/UPDATE_SYSTEM_DATA", optData);
+            }
+        },
+        regionChange(optData) {
+            if (optData) {
+                this.$store.commit("prsAddEditModule/UPDATE_REGION_DATA", optData);
+            }
+        },
+        groupChange(optData) {
+            if (optData) {
+                this.$store.commit("prsAddEditModule/UPDATE_GROUP_DATA", optData);
+            }
+        }
     }
-  }
 };
 </script>
 <style scoped lang='less'>

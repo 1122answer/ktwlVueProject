@@ -1,107 +1,43 @@
 <template>
-    <v-modal :title="titleName" :visible="visible" @cancel="cancel" :width="600" :confirmLoading="rolebutstate">
-        <v-form direction="horizontal" :model="paramConfigForm" :rules="rules" ref="paramConfigForm">
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="所属系统" :label-col="labelCol" :wrapper-col="wrapperCol" prop="systemName" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.systemName}}</span>
-                        <v-select v-else v-model="paramConfigForm.systemName" placeholder="请选择所属系统" notfound="无法找到" :data="systemData" size="lg" label="label" :optionOnChange="true" @change="systemChange" ref="selectSystem"></v-select>
+    <v-modal title="复制分组" :visible="visible" @cancel="cancel" :width="600" :confirmLoading="false">
+          <v-form direction="horizontal" v-model="copyGroupForm" ref="copyGroupForm">
+               <v-row>
+                     <v-col span='12'>
+                           <v-form-item label="来源系统" :label-col="labelCol" :wrapper-col="wrapperCol">
+                            {{copyGroupForm.srcSystemName}}<v-icon class="padding-left-5" type="question-circle-o" v-tooltip.right='msg'></v-icon>
+                           </v-form-item>
+                      </v-col>
+                      <v-col span='12'>
+                          <v-form-item label="来源区域" :label-col="labelCol" :wrapper-col="wrapperCol">
+                              {{copyGroupForm.srcRegionName}}
+                          </v-form-item>
+                       </v-col>
+              </v-row>
+              <v-row>
+                     <v-col span='12'>
+                        <v-form-item label="目标区域" :label-col="labelCol" :wrapper-col="wrapperCol">
+                               <v-tree-select placeholder="请选择区域" notfound="无法找到" :data="getRegionSelect" size="lg" label="label" :optionOnChange="true" @select="desRegionChange" style="width:100%;" ref="selectDesRegion" :allowClear="true" :popupContainer="commandRegion">
+                               </v-tree-select>
+                               <div id='desSystemRegion'></div>
+                       </v-form-item>
+                      </v-col>
+              </v-row>
+              <v-row>
+                     <v-form-item label="参数列表" :label-col="{span:4}" :wrapper-col="{span:18}" prop="">
+                     <div style="max-height:200px;overflow:auto;border:1px solid #f2f2f2;">
+                         <v-checkbox-group v-model="copyGroupForm.configKeys" @change="setState">
+                               <p v-for="item in list">
+                                  <v-checkbox  style="margin-left:10px;" :true-value="item.value" :key="item.value">{{item.label}}</v-checkbox>
+                               </p>
+                         </v-checkbox-group>
+                     </div>
                     </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="行政区域名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="regionName" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.regionName}}</span>
-                        <v-select v-else v-model="paramConfigForm.regionName" placeholder="请选择区域" notfound="无法找到" :data="regionData" size="lg" label="label" :optionOnChange="true" @change="regionChange" ref="selectRegion"></v-select>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="分组名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="groupName" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.groupName}}</span>
-                        <v-select v-else v-model="paramConfigForm.groupName" placeholder="请选择分组" notfound="无法找到" :data="groupData" size="lg" label="label" :optionOnChange="true" @change="groupChange" ref="selectGroup"></v-select>
-                    </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="分组编号" :label-col="labelCol" :wrapper-col="wrapperCol" prop="groupId">
-                        <span>{{paramConfigForm.groupId}}</span>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="参数名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configName" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.configName}}</span>
-                        <v-input v-else placeholder="请输入参数名称" v-model="paramConfigForm.configName"></v-input>
-                    </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="参数编号" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configKey" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.configKey}}</span>
-                        <v-input v-else placeholder="请输入参数编号" v-model="paramConfigForm.configKey"></v-input>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="值1" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configValue" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.configValue}}</span>
-                        <v-input v-else placeholder="请输入参数值" v-model="paramConfigForm.configValue"></v-input>
-                    </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="值2" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configValue2">
-                        <span v-if="addFlag == 1">{{paramConfigForm.configValue2}}</span>
-                        <v-input v-else placeholder="请输入参数值2" v-model="paramConfigForm.configValue2"></v-input>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="值3" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configValue3">
-                        <span v-if="addFlag == 1">{{paramConfigForm.configValue3}}</span>
-                        <v-input v-else placeholder="请输入参数值3" v-model="paramConfigForm.configValue3"></v-input>
-                    </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="参数说明" :label-col="labelCol" :wrapper-col="wrapperCol" prop="configDesc" required>
-                        <span v-if="addFlag == 1">{{paramConfigForm.configDesc}}</span>
-                        <v-input v-else placeholder="请输入参数说明" v-model="paramConfigForm.configDesc"></v-input>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='12'>
-                    <v-form-item label="是否启用" :label-col="labelCol" :wrapper-col="wrapperCol">
-                        <v-switch v-model="paramConfigForm.isEnabled">
-                            <span slot="checkedChildren">开</span>
-                            <span slot="unCheckedChildren">关</span>
-                        </v-switch>
-                    </v-form-item>
-                </v-col>
-                <v-col span='12'>
-                    <v-form-item label="操作权限" :label-col="labelCol" :wrapper-col="wrapperCol" prop="modifyType" required>
-                        <span v-if="addFlag == 1">{{modifyTypeText}}</span>
-                        <v-select v-else v-model="paramConfigForm.modifyType" placeholder="请选择操作权限" notfound="无法找到" :data="modifyTypeData" size="lg" label="text" :optionOnChange="true" @change="modifyTypeChange" ref="selectModifyType"></v-select>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col span='24'>
-                    <v-form-item label="备注" :label-col="{span : 4}" :wrapper-col="{span : 19}" prop="remark">
-                        <span v-if="addFlag == 1">{{paramConfigForm.remark}}</span>
-                        <v-input v-else type="textarea" placeholder="请输入备注" v-model="paramConfigForm.remark"></v-input>
-                    </v-form-item>
-                </v-col>
-            </v-row>
-        </v-form>
+             </v-row>
+         </v-form>
         <div slot="footer">
-            <v-button v-if="modifyTypeValue != 0" key="ok" type="primary" size="large" @click="ok">
-                <span v-if="addFlag == 1">修改</span>
-                <span v-else>保存</span>
-            </v-button>
-            <v-button key="cancel" type="ghost" size="large" @click="cancel">取消
-            </v-button>
+          <v-button type="primary" size="large" @click="select">{{selectText}}</v-button>
+          <v-button type="primary" size="large" @click="save">保存</v-button>
+          <v-button key="cancel" type="ghost" size="large" @click="cancel">取消</v-button>
         </div>
     </v-modal>
 </template>
@@ -114,143 +50,62 @@ export default {
   components: {
     //addPane
   },
-  computed: {
+  computed: { 
     ...mapState({
-      addFlag: state => state.prsAddEditModule.addFlag,
-      paramConfigForm: state => state.prsAddEditModule.paramConfigForm,
-      modifyTypeData: state => state.prsAddEditModule.selectModifyType,
-      modifyTypeText: state => state.prsAddEditModule.modifyTypeText,
-      modifyTypeValue: state => state.prsAddEditModule.modifyTypeValue,
-      systemData: state => state.prsAddEditModule.selectSystem,
-      regionData: state => state.prsAddEditModule.selectRegion,
-      groupData: state => state.prsAddEditModule.selectGroup
+        getRegionSelect: state => state.commonSelect.regionSelect,
+        copyGroupForm: state => state.copyGroupParamsModule.copyGroupForm,
+        list: state => state.copyGroupParamsModule.list,
+
     })
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("commonSelect/getRegionSelectTree",true);
+  },
   data: function() {
     return {
-      titleName: "详情", //标题
-      rolebutstate: false,
+      msg:"级别说明：通用系统-通用区域:称1级,通用系统-某某区域:称2级,某某系统-通用区域:称3级,某某系统-某某区域:称4级,复制分组，不能跨系统复制，顾只能1级复制到2级，2级复制到2级，3级复制到3、4级，4级复制到4级。",
+      selectText:"取消全选",
       labelCol: { span: 8 },
-      wrapperCol: { span: 14 },
-      rules: {
-        systemName: [
-          {
-            required: true,
-            message: "请填写系统名称"
-          }
-        ],
-        regionName: [
-          {
-            required: true,
-            message: "请填写参数编号"
-          }
-        ],
-        groupName: [
-          {
-            required: true,
-            message: "请选择参数值"
-          }
-        ],
-
-        configName: [
-          {
-            required: true,
-            message: "请填写参数名称"
-          }
-        ],
-        configKey: [
-          {
-            required: true,
-            message: "请填写参数编号"
-          }
-        ],
-        configValue: [
-          {
-            required: true,
-            message: "请选择参数值"
-          }
-        ],
-        configDesc: [
-          {
-            required: true,
-            message: "请输入参数说明"
-          }
-        ],
-        modifyType: [
-          {
-            required: true,
-            message: "请输入参数说明"
-          }
-        ]
-      }
+      wrapperCol: { span:14},
     };
   },
   methods: {
-    ok() {
-      if (this.addFlag == 1) {
-        this.$store.commit("prsAddEditModule/ADD_EDIT_FLAG", 3);
-      } else {
-        this.$emit("ok");
-        this.$refs.paramConfigForm.validate(valid => {
-          if (valid) {
-            this.rolebutstate = true;
-            // 添加模块
-            if (this.addFlag == 2) {
-              this.$store.dispatch("prsAddEditModule/addSaveData").then(res => {
-                this.rolebutstate = false;
-                if (res.data && res.data.success) {
-                  this.$message.success("添加成功");
-                  this.$emit("ok");
-                  this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
-                }
-              });
-            } else if (this.addFlag == 3) {
-              // 编辑模块
-              this.$store
-                .dispatch("prsAddEditModule/editSaveData")
-                .then(res => {
-                  this.rolebutstate = false;
-                  /*console.log(res)*/
-                  if (res.data && res.data.success) {
-                    this.$message.success(res.data.data, 1);
-                    this.$emit("ok");
-                    this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
-                  }
-                });
-            }
-          }
-        });
-      }
-    },
+    commandRegion() {
+            var selector = document.getElementById('desSystemRegion');
+            return selector;
+        },
     cancel() {
-      this.rolebutstate = false;
       this.$emit("cancel");
-      this.$refs["paramConfigForm"].resetFields();
-      this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
     },
-    modifyTypeChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_MODIFYTYPE_DATA", optData);
+    select(){
+        this.selectText="全选";
+        this.$store.dispatch("copyGroupParamsModule/checked_or_not")
+    },
+    save(){
+      this.$store.dispatch("copyGroupParamsModule/saveData").then(res=>{
+         if (res==false) {
+           this.$message.error("复制失败,请检查目标区域是否正确");
+         }else{
+          this.$message.success("复制成功");
+          this.$emit("ok");
+         }
+      })
+    },
+    desRegionChange(data){
+        this.$store.commit("copyGroupParamsModule/GET_DES_REGION",data);
+    },
+    setState(data){
+      if (data.length==this.list.length) {
+        this.selectText="取消全选"
+      }else{
+         this.selectText="全选"
       }
     },
-    systemChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_SYSTEM_DATA", optData);
-      }
-    },
-    regionChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_REGION_DATA", optData);
-      }
-    },
-    groupChange(optData) {
-      if (optData) {
-        this.$store.commit("prsAddEditModule/UPDATE_GROUP_DATA", optData);
-      }
-    }
   }
 };
 </script>
 <style scoped lang='less'>
+#desSystemRegion {
+    position: relative;
+}
 </style>

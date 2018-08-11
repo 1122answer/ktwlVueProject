@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="新增规则" :visible="visible" @ok="addOk" @cancel="addCancel">
+    <v-modal title="新增规则" :visible="visible" @ok="addOk" @cancel="addCancel" :maskClosable="false">
         <div class="numadd">
             <v-form direction="horizontal" :model="newruleForm" :rules="rules" ref="newruleForm">
                 <v-row>

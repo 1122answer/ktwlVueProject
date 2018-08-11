@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="短信模板" :visible="visible" @ok="handleOk" @cancel="handleCancel" :width="800" :confirmLoading="rolebutstate">
+    <v-modal title="短信模板" :visible="visible" @ok="handleOk" @cancel="handleCancel" :width="800" :confirmLoading="rolebutstate" :maskClosable="false">
         <v-form direction="horizontal" :model="smsTplForm" :rules="rules" ref="smsTplForm">
             <v-row>
                 <v-col span='12'>

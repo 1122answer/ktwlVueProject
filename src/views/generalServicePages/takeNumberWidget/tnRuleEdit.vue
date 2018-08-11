@@ -1,5 +1,5 @@
 <template>
-    <v-modal :title="pagetitle" :visible="visible" @ok="addOk" @cancel="addCancel" :width="900">
+    <v-modal :title="pagetitle" :visible="visible" @ok="addOk" @cancel="addCancel" :width="900" :maskClosable="false">
         <ruletable :visible="newrule" @ok="rulelistOk" @cancel="rulelistCancel" :width="900"></ruletable>
         <div class="numadd">
             <v-form direction="horizontal" :model="addruleForm" :rules="rules" ref="addruleForm">

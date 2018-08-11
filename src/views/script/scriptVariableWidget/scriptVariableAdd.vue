@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="添加" :visible="visible" :confirmLoading="variable" @ok="handleOk" @cancel="handleCancel" :width=800>
+    <v-modal title="添加" :visible="visible" :confirmLoading="variable" @ok="handleOk" @cancel="handleCancel" :width=800 :maskClosable="false">
         <v-form direction="horizontal" :model="scriptVariableForm" :rules="rules" ref="scriptVariableForm">
 
             <v-row>

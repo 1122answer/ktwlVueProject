@@ -1,6 +1,6 @@
 <template>
     <div id="detail"> 
-        <v-modal title="角色详情" :visible="visible" @ok="handleOk" @cancel="handleCancel">
+        <v-modal title="角色详情" :visible="visible" @ok="handleOk" @cancel="handleCancel" :maskClosable="false">
            <v-form direction="horizontal" :model="roleForm" ref="roleForm">
 
                 <v-row>

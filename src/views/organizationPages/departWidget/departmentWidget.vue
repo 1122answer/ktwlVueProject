@@ -1,6 +1,6 @@
 <template>
     <div id="departmentWidget">
-        <v-modal title="部门信息" :confirm-loading="asyncConfirmLoading" :visible="isDepart" @ok="depaprtmentOk" @cancel="depaprtmentCancel">
+        <v-modal title="部门信息" :confirm-loading="asyncConfirmLoading" :visible="isDepart" @ok="depaprtmentOk" @cancel="depaprtmentCancel" :maskClosable="false">
             <v-form direction="horizontal" :model="departmentForm" :rules="departmentRules" ref="departmentForm">
                 <v-form-item label="所属机构名称" :label-col="labelCol" :wrapper-col="wrapperCol">
                     <v-input size="large" v-model="departmentForm.orgName" disabled></v-input>

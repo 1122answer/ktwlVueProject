@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="机构类型信息" :visible="visible" @ok="addOk" @cancel="addCancel" :confirmLoading="addokbtn">
+    <v-modal title="机构类型信息" :visible="visible" @ok="addOk" @cancel="addCancel" :confirmLoading="addokbtn" :maskClosable="false">
         <v-form direction="horizontal" :model="orgtypeForm" :rules="rules" ref="orgtypeForm">
             <v-form-item label="机构类型名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="name" has-feedback>
                 <v-input size="large" v-model="orgtypeForm.name"></v-input>

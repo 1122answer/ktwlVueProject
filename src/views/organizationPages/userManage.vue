@@ -1,65 +1,65 @@
 <template>
     <div id="userManage" class="moduleWrap">
-        <UserAddEdit :visible="visible" @ok="handleOk" @cancel="handleCancel"></UserAddEdit>
-        <userDetails :visible="details" @ok="detailsOk" @hide="detailsCancel"></userDetails>
-        <div class="clearfix">
-            <h1 class="pull-left margin-bottom-15">用户管理 <span class="user">User Managment</span></h1>
-            <v-breadcrumb class="pull-right">
-                <v-breadcrumb-item><i class="anticon anticon-home"></i>首页</v-breadcrumb-item>
-                <v-breadcrumb-item>组织架构</v-breadcrumb-item>
-                <v-breadcrumb-item>用户管理</v-breadcrumb-item>
-            </v-breadcrumb>
-        </div>
+        <v-row class="nav-header">
+            <v-col span="12">
+                <h1>用户管理</h1>
+            </v-col>
+            <v-col span="12">
+                <v-breadcrumb class="pull-right" :style="{ 'line-height': '30px'}">
+                    <v-breadcrumb-item><i class="anticon anticon-home"></i>首页</v-breadcrumb-item>
+                    <v-breadcrumb-item>组织架构</v-breadcrumb-item>
+                    <v-breadcrumb-item>用户管理</v-breadcrumb-item>
+                </v-breadcrumb>
+            </v-col>
+        </v-row>
         <div class="box-border" ref="boxBorder">
-            <v-row>
-                <v-col span="5">
-                    <v-tree :data="treeData" :showLine="true" @select='selectFu'></v-tree>
-                </v-col>
-                <v-col span="19">
-                    <div class="container-fluid clearfix padding-bottom-5">
-                        <v-row>
-                            <v-col span="7">
-                                <v-input-group compact>
-                                    <v-input placeholder="请输入用户昵称" size="large" :style="{width:'64%'}" v-model="searchUserName"></v-input>
-                                    <v-button type="primary" size="large" @click="searchList">
-                                        <v-icon type="search"></v-icon> 查询</v-button>
-                                </v-input-group>
-                            </v-col>
-                            <v-col span="12" class="text-right pull-right">
-                                <v-button type="primary" @click="addUser" icon="plus" class="margin-right-5" :disabled="addBtnFlag" title="只有选定部门，才能新增用户"><span>添加</span></v-button>
-                            </v-col>
-                        </v-row>
-                    </div>
-                    <div class="container-fluid" ref="containerFluid">
-                        <v-data-table class="margin-top-15" :data='loadData' size="small" :columns='columns' ref="userTable" bordered @checkall="checkAll" @clickrow="clickRow" @dataloaded="userloaded" emptyText="暂时找不到你要的信息......" :style="{minWidth: '1000px'}" bordered>
-                            <template slot="td" slot-scope="props">
-                                <div v-if="props.column.field=='operation'" class="text-center" style="position: relative;z-index: 0">
-                                    <v-button-group>
-                                        <v-button type="info" @click="showDetailsModal(props.item)" title="查看详情">
+            <div class="tree-drown">
+                <v-tree :data="treeData" :showLine="true" @select='selectFu'></v-tree>
+            </div>
+            <div class="content-box">
+                <div ref="morePanelWrap">
+                    <v-more-panel>
+                        <v-form slot="form">
+                            <v-form-item>
+                                <v-input placeholder="请输入用户昵称" size="large" v-model="searchUserName" style="width:200px;"></v-input>
+                            </v-form-item>
+                        </v-form>
+                        <v-button type="primary" class="margin-right-5" slot="control" size="large" @click="searchList">
+                            <v-icon type="search"></v-icon> 查询</v-button>
+                        <v-button type="primary" size="large" @click="addUser" icon="plus" :disabled="addBtnFlag" title="只有选定部门，才能新增用户"><span>添加</span></v-button>
+                    </v-more-panel>
+                </div>
+                <div class="container-fluid clearfix" ref="containerFluid">
+                    <v-data-table :data='loadData' :columns='columns' ref="userTable" @checkall="checkAll" @clickrow="clickRow" @dataloaded="userloaded" emptyText="暂时找不到你要的信息......" size="small" bordered :height="tableBoxHeight">
+                        <template slot="td" slot-scope="props">
+                            <div v-if="props.column.field=='operation'" class="text-center" style=" position: relative;z-index: 0">
+                                <v-button-group style="width: 136px;">
+                                    <v-button type="info" @click="showDetailsModal(props.item)" title="查看详情">
                                         <v-icon type="file-text"></v-icon>
                                     </v-button>
-                                        <v-button type="success" title="绑定角色" @click="bindRole(props.item)">
-                                            <v-icon type="solution"></v-icon>
-                                        </v-button>
-                                        <v-button type="primary" title="编辑用户" @click="editUser(props.item)">
-                                            <v-icon type="edit"></v-icon>
-                                        </v-button>
-                                        <v-button type="error" title="解绑用户" @click="untieUser(props.item)" v-if="props.item.isRelationDepts">
-                                            <i class="fa fa-cut"></i>
-                                        </v-button>
-                                        <v-button type="error" title="删除用户" @click="delUser(props.item)" v-if="!props.item.isRelationDepts">
-                                            <v-icon type="delete"></v-icon>
-                                        </v-button>
-                                    </v-button-group>
-                                </div>
-                                <div v-else v-html="props.content" @click="test(props.item)"></div>
-                            </template>
-                        </v-data-table>
-                    </div>
-                </v-col>
-            </v-row>
+                                    <v-button type="success" title="绑定角色" @click="bindRole(props.item)">
+                                        <v-icon type="solution"></v-icon>
+                                    </v-button>
+                                    <v-button type="primary" title="编辑用户" @click="editUser(props.item)">
+                                        <v-icon type="edit"></v-icon>
+                                    </v-button>
+                                    <v-button type="error" title="解绑用户" @click="untieUser(props.item)" v-if="props.item.isRelationDepts">
+                                        <i class="fa fa-cut"></i>
+                                    </v-button>
+                                    <v-button type="error" title="删除用户" @click="delUser(props.item)" v-if="!props.item.isRelationDepts">
+                                        <v-icon type="delete"></v-icon>
+                                    </v-button>
+                                </v-button-group>
+                            </div>
+                            <div v-else v-html="props.content" @click="test(props.item)"></div>
+                        </template>
+                    </v-data-table>
+                </div>
+            </div>
         </div>
         <BindRole :is-role="roleShow" @ok="roleOk" @cancel="roleCancel"></BindRole>
+        <UserAddEdit :visible="visible" @ok="handleOk" @cancel="handleCancel"></UserAddEdit>
+        <userDetails :visible="details" @ok="detailsOk" @hide="detailsCancel"></userDetails>
     </div>
 </template>
 <script>
@@ -90,9 +90,8 @@ export default {
             }
         });
         this.$nextTick(() => {
-            var tt = this.$refs.boxBorder.scrollHeight;
-            this.boxHeight = tt - 72;
-            this.$refs.containerFluid.style.maxHeight = this.boxHeight + 'px';
+            let tableBoxHeight = this.$refs.boxBorder.scrollHeight - (this.$refs.morePanelWrap.scrollHeight + 18);
+            this.tableBoxHeight = tableBoxHeight;
         });
     },
     beforeDestroy() {
@@ -100,6 +99,7 @@ export default {
     },
     data: function() {
         return {
+            tableBoxHeight: 300,
             searchUserName: '',
             visible: false,
             details: false,
@@ -124,8 +124,8 @@ export default {
                 { title: "所属机构", field: 'orgName' },
                 { title: "所属部门", field: 'deptName' },
                 { title: "真实姓名", field: 'realName' },
-                { title: "手机号码", field: 'mobile' },
-                { title: "操作", field: 'operation', width: '180px', className: 'text-center' },
+                { title: "手机号码", field: 'mobile', },
+                { title: "操作", field: 'operation', className: 'text-center', width: '180px' },
             ],
             treeData: [],
             roleShow: false,
@@ -320,10 +320,10 @@ export default {
         showDetailsModal(event) {
             console.log(event);
             this.details = true;
-            this.$store.dispatch("userAddEditModule/fetchGetUserInfo",{
-                deptid:event.deptId,
-                orgid:event.orgId,
-                userid:event.userId,
+            this.$store.dispatch("userAddEditModule/fetchGetUserInfo", {
+                deptid: event.deptId,
+                orgid: event.orgId,
+                userid: event.userId,
             });
         },
         detailsOk() {

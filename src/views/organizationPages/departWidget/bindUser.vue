@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="绑定用户" :visible="isUser" :width=800 @cancel="handleCancel">
+    <v-modal title="绑定用户" :visible="isUser" :width=800 @cancel="handleCancel" :maskClosable="false">
         <div style="max-height: 600px;overflow-y: auto;">
             <p class="text-md text-primary">请为 “{{deptName}}” 勾选用户，然后点击“确定”。</p>
             <div class="widgetWrap">

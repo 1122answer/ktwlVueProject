@@ -1,14 +1,11 @@
 <template>
     <div id="roleManage.vue" class="moduleWrap">
-        <roleAddModal :visible="visible" @ok="okDialog" @hide="hideDialog"></roleAddModal>
-        <roleAssignPermissions :visible="permission" @ok="permissionOk" @hide="permissionCancel"></roleAssignPermissions>
-        <roleDetailsModal :visible="details" @ok="detailsOk" @hide="detailsCancel"></roleDetailsModal>
-        <v-row class="padding-bottom-10">
+        <v-row class="nav-header">
             <v-col span="12">
                 <h1>角色管理</h1>
             </v-col>
             <v-col span="12">
-                <v-breadcrumb class="pull-right">
+                <v-breadcrumb class="pull-right" :style="{ 'line-height': '30px'}">
                     <v-breadcrumb-item><i class="anticon anticon-home"></i>首页</v-breadcrumb-item>
                     <v-breadcrumb-item>组织架构</v-breadcrumb-item>
                     <v-breadcrumb-item>角色管理</v-breadcrumb-item>
@@ -16,23 +13,21 @@
                 </v-breadcrumb>
             </v-col>
         </v-row>
-        <div class="box-border padding-10" ref="boxBorder">
-            <v-row>
-                <v-col class="pull-left" span='24'>
-                    <v-col span="6">
+        <div class="box-border" ref="boxBorder">
+            <div ref="morePanelWrap">
+                <v-more-panel>
+                    <v-form slot="form">
                         <v-input-group compact>
-                            <v-input placeholder="请输入角色名称" size="large" :style="{width:'64%'}" v-model="searchName"></v-input>
+                            <v-input placeholder="请输入角色名称" size="large" :style="{width:'200px'}" v-model="searchName"></v-input>
                             <v-button type="primary" size="large" @click="searchTable">
                                 <v-icon type="search"></v-icon> 查询</v-button>
                         </v-input-group>
-                    </v-col>
-                    <v-col span="18" class="text-right">
-                        <v-button type="primary" size="large" @click="showModalRole"><span><i class="anticon anticon-plus"></i> 添加</span></v-button>
-                    </v-col>
-                </v-col>
-            </v-row>
+                    </v-form>
+                    <v-button type="primary" size="large" @click="showModalRole" class="pull-right"><span><i class="anticon anticon-plus"></i> 添加</span></v-button>
+                </v-more-panel>
+            </div>
             <div class="container-fluid" ref="containerFluid">
-                <v-data-table ref="roleTable" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" class="margin-top-15" bordered emptyText="暂时找不到你要的信息......">
+                <v-data-table ref="roleTable" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" bordered emptyText="暂时找不到你要的信息......" :height="tableBoxHeight">
                     <template slot="td" slot-scope="props">
                         <div v-if="props.column.field=='operation'" class="text-center">
                             <v-button-group>
@@ -68,6 +63,9 @@
                 </v-data-table>
             </div>
         </div>
+        <roleAddModal :visible="visible" @ok="okDialog" @hide="hideDialog"></roleAddModal>
+        <roleAssignPermissions :visible="permission" @ok="permissionOk" @hide="permissionCancel"></roleAssignPermissions>
+        <roleDetailsModal :visible="details" @ok="detailsOk" @hide="detailsCancel"></roleDetailsModal>
     </div>
 </template>
 <script>
@@ -90,15 +88,15 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            var tt = this.$refs.boxBorder.scrollHeight;
-            this.boxHeight = tt - 72;
-            this.$refs.containerFluid.style.maxHeight = this.boxHeight + 'px';
+            let tableBoxHeight = this.$refs.boxBorder.scrollHeight - (this.$refs.morePanelWrap.scrollHeight + 18);
+            this.tableBoxHeight = tableBoxHeight;
         });
     },
     data: function() {
         return {
+            tableBoxHeight:300,
             permission: false,
-            details:false,
+            details: false,
             searchName: "",
             name: 'roleManage',
             visible: false,
@@ -161,7 +159,7 @@ export default {
             this.permission = false;
         },
 
-         //显示添加和编辑对话框
+        //显示添加和编辑对话框
         showDetailsModal(event) {
             this.details = true;
             this.$store.dispatch("roleManageModule/getRoleList", event.roleId);
@@ -214,7 +212,7 @@ export default {
                 id: data.roleId
             }).then(res => {
                 if (res.data && res.data.success) {
-                    this.$message['success'](res.data.data,1);
+                    this.$message['success'](res.data.data, 1);
                     this.$refs.roleTable.refresh();
                 }
             }); //传switch控件的值到管理界面

@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="新增字典" :visible="visible" @ok="addOk" @cancel="addCancel">
+    <v-modal title="新增字典" :visible="visible" @ok="addOk" @cancel="addCancel" :maskClosable="false">
         <div class="dicadd">
             <v-form direction="horizontal" :model="newdicForm" :rules="rules" ref="newdicForm">
                 <v-row>

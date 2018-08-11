@@ -5,8 +5,9 @@ export default {
     namespaced: true,
     state: {
         watch:false,
+        formdisabled:true,
+
     	dialogtitle:"新增要件信息",
-    	formdisabled:false,
     	groupSelectlist:[],
         FiletypeSelect:[],
         operateSelect:[],
@@ -36,7 +37,7 @@ export default {
             return api.request("get", api.getURL("enclosure/fileSel"), {
                 selectCode:2
             }).then(res => {
-            	console.log(res)
+            	// console.log(res)
                 let opt = res.data.data.map(item => {
                     return {
                         label: item.text,
@@ -74,13 +75,25 @@ export default {
         },
         // 添加列表
         addlist({ commit, state }, params){
+            // console.log(state.newruleForm)
+            if(state.newruleForm.regionCode==""){
+                state.newruleForm.regionName=""; 
+            }
+            if(state.newruleForm.systemId==""){
+                state.newruleForm.systemName=""; 
+            }
         	 return api.request("post", api.getURL("enclosure/add"),state.newruleForm).then(res=>{
 					return res
         	 })
         },
         // 编辑列表
         editlist({ commit, state }, params){
-        	console.log(state.newruleForm)
+            if(state.newruleForm.regionCode==""){
+                state.newruleForm.regionName=""; 
+            }
+            if(state.newruleForm.systemId==""){
+                state.newruleForm.systemName=""; 
+            }
         	 return api.request("post", api.getURL("enclosure/edit"),state.newruleForm).then(res=>{
         	 	return res
         	 })
@@ -115,12 +128,13 @@ export default {
         	}
         },
         ADDGETREGION(state,params){
+            // console.log(params)
         	if (params==undefined) {
         		state.newruleForm.regionCode="";
         		state.newruleForm.regionName="";
         	}else{
-        		state.newruleForm.regionCode=params.value;
-        		state.newruleForm.regionName=params.label;
+        		state.newruleForm.regionCode=params.regionCode;
+        		state.newruleForm.regionName=params.title;
         	}
         },
         ADDGROUP(state,params){
@@ -157,12 +171,19 @@ export default {
         },
         EDITFORM(state,params){
         	state.dialogtitle="修改要件类型";
-            state.formdisabled=false;
             state.watch=false;
+            state.formdisabled=true;
+            // state.watch=false;
         	state.newruleForm.systemId=params.systemId;
         	state.newruleForm.systemName=params.systemName;
+            if (params.systemId=="") {
+                state.newruleForm.systemName="通用系统"
+            }
         	state.newruleForm.regionCode=params.regionCode;
         	state.newruleForm.regionName=params.regionName;
+            if (params.regionCode=="") {
+                state.newruleForm.regionName="通用区域"
+            }
         	state.newruleForm.groupId=params.groupId;
         	state.newruleForm.groupName=params.groupName;
         	state.newruleForm.title=params.title;
@@ -176,28 +197,13 @@ export default {
         	state.newruleForm.isEnabled=params.isEnabled;
         	state.newruleForm.cconfigId=params.cconfigId;
         	state.newruleForm.remark=params.remark;
+            console.log(state.newruleForm)
         },
         DETAILFORM(state,params){
         	state.dialogtitle="查看要件类型";
-            state.formdisabled=true;
         	state.watch=true;
-        	state.newruleForm.systemId=params.systemId;
-        	state.newruleForm.systemName=params.systemName;
-        	state.newruleForm.regionCode=params.regionCode;
-        	state.newruleForm.regionName=params.regionName;
-        	state.newruleForm.groupId=params.groupId;
-        	state.newruleForm.groupName=params.groupName;
-        	state.newruleForm.title=params.title;
-        	state.newruleForm.cconfigType=params.cconfigType;
-        	state.newruleForm.cconfigCount=params.cconfigCount;
-        	state.newruleForm.pageCount=params.pageCount;
-        	state.newruleForm.operateTypeInter=params.operateTypeInter;
-        	state.newruleForm.operateTypeNet=params.operateTypeNet;
-        	state.newruleForm.sortId=params.sortId;
-        	state.newruleForm.fileType=params.fileType;
-        	state.newruleForm.isEnabled=params.isEnabled;
-        	state.newruleForm.cconfigId=params.cconfigId;
-        	state.newruleForm.remark=params.remark;
+            state.formdisabled=true;
+    
         },
     },
     //getters: {}

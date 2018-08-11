@@ -14,6 +14,7 @@ export default {
         // 获取行政区域列表
         //如果需要带通用区域，只需params为真
         getRegionSelectTree({ commit, state }, params) {
+            console.log(params)
             return api.request("get", api.getURL("region/selectTree"), {
                 isEnabled: true
             }).then(res => {
@@ -31,6 +32,7 @@ export default {
                 var newDataTree = [];
                 TreeUtil.build(opt, newDataTree ,false);
                 commit('SELECT_LIST_REGION', newDataTree);
+                console.log(newDataTree)
                 commit('SET_ORIGINAL_REGION',opt);
             });
         },

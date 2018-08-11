@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="查看短信模板" :visible="isView" @cancel="handleCancel" :width="800">
+    <v-modal title="查看短信模板" :visible="isView" @cancel="handleCancel" :width="800" :maskClosable="false">
         <v-form direction="horizontal" :model="smsTplForm" ref="smsTplForm" class="widgetWrap">
             <v-row>
                 <v-col span='12'>

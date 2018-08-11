@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="详情" :visible="visible" @cancel="customFooterCancel" :width="700">
+    <v-modal title="详情" :visible="visible" @cancel="customFooterCancel" :width="700" :maskClosable="false">
        <v-form direction="horizontal" :model="regionForm" ref="regionForm">
              <v-row>
                 <v-col span="11">

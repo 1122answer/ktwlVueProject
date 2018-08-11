@@ -1,6 +1,6 @@
 <!-- 分配权限 -->
 <template>
-    <v-modal title="分配权限" :visible="visible" @cancel="permissionCancel">
+    <v-modal title="分配权限" :visible="visible" @cancel="permissionCancel" :maskClosable="false">
         <div class="widgetWrap">
             <v-tree :data="treeData" checkable multiple @check="checkFn" ref="rolePesTree"></v-tree>
         </div>

@@ -21,11 +21,8 @@ export default {
     },
     actions: {
         saveData({ commit, state }, param) {
-            if (state.copyRegionForm.desRegionCode=="" && state.copyRegionForm.desSystemId=="") {
-                let flag =1 
-            }
-            if (state.copyRegionForm.srcSystemId=="" && state.copyRegionForm.srcRegionCode=="") {
-                let flag =1 
+            if (state.copyRegionForm.srcSystemId==state.copyRegionForm.desSystemId) {
+                return false
             }
             if(state.copyRegionForm.srcSystemId==""){
                 state.copyRegionForm.srcSystemName="";
@@ -39,12 +36,16 @@ export default {
             if(state.copyRegionForm.desSystemId==""){
                 state.copyRegionForm.desSystemName="";
             }
-            // return api.request("post", api.getURL("paramsConfig/copyRegion"), state.copyRegionForm).then(res => {
-            //     return res;
-            // });
+            return api.request("post", api.getURL("paramsConfig/copyRegion"), state.copyRegionForm).then(res => {
+                    if (res.data.success==false) {
+                        state.copyGroupForm.srcSystemName="通用系统"
+                        state.copyGroupForm.srcRegionName="通用区域"
+                    }
+                return res;
+            });
         },
         //根据系统和区域获取分组
-        getGroupList({ commit, state }, params) {
+        getRigionList({ commit, state }, params) {
             console.log(params)
             state.copyRegionForm.srcSystemId=params.systemId;
             state.copyRegionForm.srcSystemName=params.systemName;
@@ -89,42 +90,6 @@ export default {
             state.copyRegionForm.desRegionCode=data.value;
             state.copyRegionForm.desRegionName=data.label;
         },
-        //初始化来源数据
-        // INIT_FORM_DATA(state, data) {
-        //     state.copyRegionForm.srcSystemId = data.systemId;//来源系统标识
-        //     state.copyRegionForm.srcRegionCode = data.regionCode;//来源区域编码
-        //     state.copyRegionForm.srcSystemName = data.systemName;
-        //     state.copyRegionForm.srcRegionName = data.regionName;
-        // },
-        // UPDATE_ADD_DEFAULT_DATA(state, data) {
-        //     state.paramConfigForm.groupId = data.groupId;
-        //     state.paramConfigForm.groupName = data.groupName;
-        //     state.paramConfigForm.systemName = data.systemName;
-        //     state.paramConfigForm.systemId = data.systemId;
-        //     state.paramConfigForm.regionName = data.regionName;
-        //     state.paramConfigForm.regionCode = data.regionCode;
-        // },
-        // //初始化目标系统
-        // INIT_DES_SYSTEM_DATA(state, data) {
-        //     state.desSystem = data;
-        // },
 
-        // //初始化目标区域
-        // INIT_DES_REGION_DATA(state, data) {
-        //     state.desRegion = data;
-        // },
-
-        // UPDATE_DES_SYSTEM_DATA(state, data) {
-        //     // state.paramConfigForm.systemName = data.label;
-        //     state.copyRegionForm.systemId = data.value;
-        // },
-        // UPDATE_DES_REGION_DATA(state, data) {
-        //     state.copyRegionForm.regionCode = data.value;
-        //     // state.paramConfigForm.regionName = data.label;
-        // },
-        // UPDATE_GROUP_DATA(state, data) {
-        //     state.paramConfigForm.groupId = data.value;
-        //     state.paramConfigForm.groupName = data.label;
-        // },
     },
 };

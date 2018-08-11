@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="添加脚本分类" :visible="visible" :confirmLoading="scriptbutstate" @ok="handleOk" @cancel="handleCancel">
+    <v-modal title="添加脚本分类" :visible="visible" :confirmLoading="scriptbutstate" @ok="handleOk" @cancel="handleCancel" :maskClosable="false">
         <v-form direction="horizontal" :model="scriptTypeForm" :rules="rules" ref="scriptTypeForm">
             <v-form-item label="脚本分类名称" :label-col="labelCol" :wrapper-col="wrapperCol" prop="name" has-feedback>
                 <v-input placeholder="请输入脚本分类名称" size="large" v-model="scriptTypeForm.name"></v-input>

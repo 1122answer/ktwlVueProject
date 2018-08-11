@@ -1,6 +1,6 @@
 <template>
     <div id="userAddEdit">
-        <v-modal title="用户信息" :visible="visible" :width=800 @ok="handleOk" @cancel="handleCancel" :confirm-loading="asyncConfirmLoading">
+        <v-modal title="用户信息" :visible="visible" :width=800 @ok="handleOk" @cancel="handleCancel" :confirm-loading="asyncConfirmLoading" :maskClosable="false">
             <v-form direction="horizontal" class="alert-content" :model="userForm" :rules="rules" ref="userForm">
                 <h4 class="padding-bottom-10"><i class="fa fa-leaf oxford"></i> 个人信息</h4>
                 <v-row>

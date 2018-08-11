@@ -5,7 +5,11 @@
                 <div class="logo"><img src="./assets/logo.png" alt="logo"></div>
                 <h2 class="title">开拓未来xx平台</h2>
                 <ul class="navbar-custom-menu" title="退出" @click="logOutPlatform">
-                    <li class="name"> <v-icon type="logout"></v-icon> 退出系统</li>
+                    <li class="signOut">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-shouye-tuichu"></use>
+                        </svg>
+                    </li>
                 </ul>
                 <h5 class="welcome">欢迎 <b v-text="currentUser.accountUser"></b> 进入系统</h5>
             </v-header>
@@ -28,18 +32,22 @@
                                     <span v-text="currentUser.currentDeptName"></span>
                                 </p>
                             </div>
-                            <v-row class="margin-top-20 padding-left-20">
+                            <v-row class="margin-top-20 padding-left-20 padding-right-20">
                                 <v-input-group compact>
-                                    <v-input placeholder="请输入菜单名称" :style="{width:'70%'}" v-model="serchKeyWord" ></v-input>
-                                    <v-button size="" @click="search(serchKeyWord)">
+                                    <v-input placeholder="请输入菜单名称" :style="{width:'100%'}" v-model="serchKeyWord" ></v-input>
+                                    <!-- <v-button size="" @click="search(serchKeyWord)">
                                         <v-icon type="search"></v-icon>
-                                    </v-button>
+                                    </v-button> -->
                                 </v-input-group>
                             </v-row>
                         </div>
+                                <div class="noMenu" v-if="menuData.length==0">
+                                    <p>没有相关菜单,请换一个搜索关键字吧!</p>
+                                </div>
                         <div class="" style="border:none;margin-top:10px;height: calc(100% - 140px);width:100%;">
                             <happy-scroll color="#ddd" size="5" resize>
-                                <v-menu mode="inline" :data="menuData" style="background:rgb(249,249,249)">
+                                
+                                <v-menu mode="inline" :data="menuData" style="background:rgb(249,249,249)" @submenu-click="menuClick">
                                     <template slot-scope="{data}">
                                         <i style="font-size:10px;" class="spec-icon-item" v-if="data.icon" :class="'anticon anticon-' + data.icon"></i>
                                         <router-link class="spec-icon-item link-item" :to="data.href" style="display:inline;font-size:12px;font-weight:400;">{{data.name}}</router-link>
@@ -50,10 +58,10 @@
                                     </template>
                                 </v-menu>
                             </happy-scroll>
-                         </div>
+                        </div>
                     </v-sider>
-                    <v-content :style="{ padding: '10px 15px',height:'100%',overflow:'auto' }">
-                        <router-view></router-view>
+                    <v-content :style="{ padding: '10px 10px 0 15px',height:'100%',overflow:'auto','boxSizing': 'border-box' }">
+                        <router-view v-if="isRouterAlive"></router-view>
                     </v-content>
                 </v-layout>
             </v-content>
@@ -75,41 +83,25 @@ export default {
         ...mapState({
             currentUser: state => state.globalPermissonModule.currentUser,
             menuData: state => state.globalPermissonModule.menuData
-        }),
-        fliterMenu:function(){
-            var self=this;
-
-              var fliterMenu;
-             var childrenArr=[];
-             fliterMenu= this.menuData.filter((element,index) => {
-               /* var  arr=[];
-               arr = JSON.parse(JSON.stringify(element.children)).filter(ele=>{
-                   return ele.name.indexOf(self.serchKeyWord) > -1
-               })
-               if(arr.length>0) childrenArr.push( JSON.parse(JSON.stringify(arr)))  */
-               return element.name.indexOf(self.serchKeyWord) > -1
-            });
-            //fliterMenu=JSON.parse(JSON.stringify(fliterMenu));
-             fliterMenu.forEach((element,index) => {
-                //element.children=[];
-                //element.children=JSON.parse(JSON.stringify(childrenArr[index]))
-                //element.expand=true
-            });  
-           console.log(this.menuData)
-            //console.log(childrenArr)
-            console.log(fliterMenu) 
- 
-            return fliterMenu
-        }
+        })
     },
     mounted() {
         this.$store.commit('globalPermissonModule/INIT_FORM_DATA'); //清空用户和权限数据
         this.$store.dispatch('globalPermissonModule/getMenuPermission'); //请求权限数据
         this.$store.dispatch('globalPermissonModule/getCurrentUser'); //请求当前用户的数据
+        window.onresize = () => {
+           this.reload();
+        }
+    },
+    provide(){
+        return {
+            reload: this.reload
+        }
     },
     data: function() {
         return {
             customCollapsed: false,
+            isRouterAlive: true,
             serchKeyWord:'',
            /*  menuData: [{
                     name: "组织架构",
@@ -214,16 +206,16 @@ export default {
                     }, ]
                 },
                 {
-                    name: "要件管理",
+                    name: "系统业务",
                     expand: false,
                     icon: "hdd",
                     children: [{
-                        name: "要件信息",
+                        name: "要件管理",
                         href: '/view/enclosuereManage'
                     }, {
                         name: "业务管理",
                         href: '/view/businessManage'
-                    },{
+                    }, {
                         name: "分组管理",
                         href: '/view/groupManage'
                     }]
@@ -259,25 +251,19 @@ export default {
         logOutPlatform() {
             this.$router.push({ path: '/login' });
         },
-        search(word){
-            console.log(word)
-            console.log(this.menuData)
+        reload(){
+            this.isRouterAlive = false;
+            this.$nextTick(function(){
+                this.isRouterAlive = true;
+            });
         },
-        fnDeepClone(obj){
-            var result = typeof obj.splice === 'function'?[]:{},
-            key;
-            if (obj && typeof obj === 'object'){
-                for (key in obj ){
-                    if (obj[key] && typeof obj[key] === 'object'){
-                        result[key] = this.fnDeepClone(obj[key]);//如果对象的属性值为object的时候，递归调用deepClone，即再把某个值对象复制一份到新的对象的对应值中
-                    }else{
-                        result[key] = obj[key];//如果对象的属性值不为object的时候，直接复制参数对象的每一个键/值到新对象对应的键/值中
-                    }
-                    
-                }
-                return result;
-            }
-            return obj;
+        menuClick(data){
+            this.$store.commit('globalPermissonModule/CLICK_MENU',data.id);
+        }
+    },
+    watch:{
+        serchKeyWord(value){
+            this.$store.commit('globalPermissonModule/SEACRH_MENU',value);
         }
     }
 };
@@ -285,6 +271,10 @@ export default {
 <style scoped lang='less'>
 #components-layout-demo-top-side {
     height: 100%;
+    .noMenu{
+        padding: 15px 20px;
+        color: #999;
+    }
     .ant-layout {
         height: 100%;
     }
@@ -368,17 +358,19 @@ export default {
         width: 30px;
         border-radius: 15px;
     }
-    .navbar-custom-menu>.name {
+    .navbar-custom-menu>.signOut {
         position: relative;
         top: -10px;
-        left: 10px;
+        left: 30px;
+        /* color:#246AD9; */
+        font-size:22px;
     }
     .ant-layout-footer {
         position: fixed;
         bottom: 0;
         width: 100%;
     }
-    .happy-scroll-strip--vertical{
+    .happy-scroll-strip--vertical {
         z-index: 2;
     }
 }

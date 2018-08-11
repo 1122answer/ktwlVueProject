@@ -4,7 +4,7 @@
       <v-row>
         <v-col span='12'>
           <v-form-item label="来源系统" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <span>{{copyRegionForm.srcSystemName}}</span>
+            <span>{{copyRegionForm.srcSystemName}}<v-icon class="padding-left-5" type="question-circle-o" v-tooltip.right='msg'></v-icon></span>
           </v-form-item>
         </v-col>
         <v-col span='12'>
@@ -40,6 +40,7 @@
        </v-row>
     </v-form>
     <div slot="footer">
+
       <v-button type="primary" size="large" @click="select">{{selectText}}</v-button>
       <v-button type="primary" size="large" @click="save">保存</v-button>
       <v-button key="cancel" type="ghost" size="large" @click="cancel">取消</v-button>
@@ -73,6 +74,7 @@ export default {
   },
   data: function() {
     return {
+      msg:"级别说明：通用系统-通用区域:称1级,通用系统-某某区域:称2级,某某系统-通用区域:称3级,某某系统-某某区域:称4级,复制区域，能1级复制到2、3、4级，2级复制到2、3、4级，3级复制到3、4级，4级复制到4级。",
       selectText: "取消全选",
       titleName: "复制区域", //标题
       rolebutstate: false,
@@ -93,29 +95,21 @@ export default {
     //保存
     save() {
       this.$store.dispatch("copyRegionParamsModule/saveData").then(res=>{
-         if (res==false) {
-           this.$message.error("不能复制到该区域");
-         }
+        console.log(res)
+        if (res==false) {
+          this.$message.error("复制失败，请检查目标系统或区域是否正确");
+          return
+        }
+        this.$message.success("复制成功");
+        this.$emit("ok");
       })
-      // this.$emit("ok");
     },
     //取消
     cancel() {
       this.rolebutstate = false;
       this.$emit("cancel");
-      // this.$refs["paramConfigForm"].resetFields();
-      // this.$store.commit("prsAddEditModule/INIT_FORM_DATA");
     },
-    systemChange(optData) {
-      // if (optData) {
-      //   this.$store.commit("prsAddEditModule/UPDATE_SYSTEM_DATA", optData);
-      // }
-    },
-    regionChange(optData) {
-      // if (optData) {
-      //   this.$store.commit("prsAddEditModule/UPDATE_REGION_DATA", optData);
-      // }
-    },
+
     // 选择复制项
     setState(data){
       if (data.length==this.list.length) {

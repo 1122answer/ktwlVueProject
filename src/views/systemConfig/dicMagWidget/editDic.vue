@@ -1,5 +1,5 @@
 <template>
-    <v-modal :title="pagetitle" :visible="visible" @ok="addOk" @cancel="addCancel" :width="600">
+    <v-modal :title="pagetitle" :visible="visible" @ok="addOk" @cancel="addCancel" :width="600" :maskClosable="false">
         <div class="dicedit">
             <v-form direction="horizontal" :model="newdicForm" :rules="rules" ref="newdicForm">
                 <v-row>

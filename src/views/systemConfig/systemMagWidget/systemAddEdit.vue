@@ -1,5 +1,5 @@
 <template>
-    <v-modal :title="titleName"  :visible="visible" @ok="customFooterOk" @cancel="customFooterCancel" @editbtn="editbtn" :width="700" >
+    <v-modal :title="titleName"  :visible="visible" @ok="customFooterOk" @cancel="customFooterCancel" @editbtn="editbtn" :width="700" :maskClosable="false">
         <v-form direction="horizontal" :model="systemForm" :rules="rules" ref="systemForm">
            <v-row>
                <v-col span="11">

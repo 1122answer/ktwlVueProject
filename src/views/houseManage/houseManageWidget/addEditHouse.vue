@@ -1,6 +1,6 @@
 <template>
     <div id="addEditHouse">
-        <v-modal title="添加房间号" :visible="visible" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag">
+        <v-modal title="添加房间号" :visible="visible" @ok="handleAsyncOk" @cancel="handleAsyncCancel" :confirm-loading="asyncConfirmLoading" :width="mdlwidth" wrapClassName="wrapOuter" ref="mdl" :tog-full="togFlag" :maskClosable="false">
             <span class="zoomFull" @click="zoomFullClick"><v-icon type="scan" v-show="fullIcon" title="全屏"></v-icon><v-icon type="switcher" v-show="exitIcon" title="退出全屏"></v-icon></span>
             <div :style="entHeight">
                 <v-form direction="horizontal" :model="addSingHouseForm" :rules="rules" ref="addSingHouseForm">

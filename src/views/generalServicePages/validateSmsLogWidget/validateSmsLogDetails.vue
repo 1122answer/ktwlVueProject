@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="详情" :visible="visible" @cancel="cancel" :confirm-loading="asyncConfirmLoading">
+    <v-modal title="详情" :visible="visible" @cancel="cancel" :confirm-loading="asyncConfirmLoading" :maskClosable="false">
         <v-form direction="horizontal" class="alert-content" :model="detailsForm" ref="detailsForm">
             <v-form-item class="itempadding" label="短信验证码记录ID" prop="smsVcodelogId" :label-col="labelCol" :wrapper-col="wrapperCol">
                 <span class="ant-form-text" id="smsVcodelogId" name="smsVcodelogId">{{detailsForm.smsVcodelogId}}</span>

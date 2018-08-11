@@ -1,6 +1,6 @@
 <template>
     <div id="detailMsgDiag">
-        <v-modal title="查看消息信息" :visible="true" v-show="isMsg" :width="1050" :confirm-loading="asyncConfirmLoading" @cancel="closeDetail">
+        <v-modal title="查看消息信息" :visible="true" v-show="isMsg" :width="1050" :confirm-loading="asyncConfirmLoading" @cancel="closeDetail" :maskClosable="false">
             <v-form direction="horizontal" :model="msgForm" ref="msgForm">
                 <v-row>
                     <v-col span='8'>

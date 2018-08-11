@@ -1,21 +1,20 @@
 <template>
     <div id="regionManage" class="moduleWrap">
-        <regionAdd :visible="visible" @ok="okAddDialog" @hide="hideAddDialog"></regionAdd>
-        <regionDetails :visible="details" @hide="hideDetailsDialog"></regionDetails>
-        <v-row class="padding-bottom-10">
+        <v-row class="nav-header">
             <v-col span="12">
                 <h1>行政区域</h1>
             </v-col>
             <v-col span="12">
-                <v-breadcrumb class="pull-right" :style="{ 'line-height': '38px'}">
+                <v-breadcrumb class="pull-right" :style="{ 'line-height': '30px'}">
                     <v-breadcrumb-item>首页</v-breadcrumb-item>
                     <v-breadcrumb-item>组织架构</v-breadcrumb-item>
                     <v-breadcrumb-item>行政区域</v-breadcrumb-item>
                 </v-breadcrumb>
             </v-col>
         </v-row>
-        <div class="box-border padding-10" ref="boxBorder">
-            <div class="clearfix padding-bottom-10">
+        <div class="box-border" ref="boxBorder">
+            <div ref="morePanelWrap">
+                <v-more-panel>
                 <!-- <v-form slot="form">
                      <v-form-item label="行政区域名称">
                          <v-input placeholder="请输入行政区域名称" v-model="searchname"></v-input>
@@ -37,9 +36,10 @@
                 <v-button type="primary" size="large" class="pull-right" @click="showAddModal" style="margin-top:2px;">
                     <v-icon type="plus"></v-icon> 新增</v-button>
                 </v-button>
+            </v-more-panel>
             </div>
-            <div class="container-fluid" ref="containerFluid">
-                <v-data-table ref="reginTable" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" class="margin-top-15" tree-table :tree-option='treeOption' bordered :pagination='false' :currentData.sync='currentData' emptyText="暂时找不到你要的信息......">
+            <div class="container-fluid clearfix" ref="containerFluid">
+                <v-data-table ref="reginTable" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" tree-table :tree-option='treeOption' bordered :pagination='false' :currentData.sync='currentData' emptyText="暂时找不到你要的信息......" :height="tableBoxHeight">
                     <template slot="td" slot-scope="props">
                         <div v-if="props.column.field=='operation'" class="text-center">
                             <v-button-group>
@@ -71,6 +71,8 @@
                 </v-data-table>
             </div>
         </div>
+        <regionAdd :visible="visible" @ok="okAddDialog" @hide="hideAddDialog"></regionAdd>
+        <regionDetails :visible="details" @hide="hideDetailsDialog"></regionDetails>
     </div>
 </template>
 <script>
@@ -84,18 +86,18 @@ export default {
         regionDetails,
     },
     computed: {
-        ...mapState({
-        })
+        // ...mapState({
+        // })
     },
     mounted() {
         this.$nextTick(() => {
-            var tt = this.$refs.boxBorder.scrollHeight;
-            this.boxHeight = tt - 72;
-            this.$refs.containerFluid.style.maxHeight = this.boxHeight + 'px';
+            let tableBoxHeight = this.$refs.boxBorder.scrollHeight - (this.$refs.morePanelWrap.scrollHeight + 18);
+            this.tableBoxHeight = tableBoxHeight;
         });
     },
     data: function() {
         return {
+            tableBoxHeight: '',
             searchname: '',
             shortName: '',
             regionCode: '',

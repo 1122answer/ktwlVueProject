@@ -7,11 +7,12 @@ import qs from 'qs';
 import { router } from "./rloc.js";
 const devMode = false; //一键切换开发环境
 //在这里进行接口的统一配置，所有的url都走这里
+let globalTime = new Date();
 
 function interceptorsMethod(store, context) {
     //全局Ajax监控
     axios.interceptors.response.use((response) => {
-        console.log(2222222222222222, response)
+        globalTime = new Date();
         if (!response.data.success) {
             context.$message.error(response.data.message);
             return 0;
@@ -26,7 +27,17 @@ function interceptorsMethod(store, context) {
     }, (error) => {
         console.log(error);
         Promise.reject(error);
-    })
+    });
+    setInterval(clock,600050);
+    //不超时
+    function clock(){
+        var currentTime = new Date();
+        var plusResult = (currentTime - globalTime)/1000/60;
+        if(plusResult > 10){
+            console.log('更新接口,永不超时');
+            store.dispatch('globalPermissonModule/getCurrentUser');
+        }   
+    }
 }
 
 function requestMethod(method, url, data = null) {

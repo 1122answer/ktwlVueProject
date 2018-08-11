@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="查看短信模板" :visible="visible" @cancel="handleCancel" >
+    <v-modal title="查看机构类型" :visible="visible" @cancel="handleCancel" :maskClosable="false">
         <v-form direction="horizontal" :model="orgTypeViewForm" ref="orgTypeViewForm" class="widgetWrap">
             
                     <v-form-item label="机构类型名称" :label-col="labelCol" :wrapper-col="wrapperCol">

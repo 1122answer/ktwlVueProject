@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="复制分组" :visible="visible" @ok="saveOk" @cancel="addCancel" :width="600">
+    <v-modal title="复制分组" :visible="visible" @ok="saveOk" @cancel="addCancel" :width="600" :maskClosable="false">
         <div class="dicedit">
             <v-form direction="horizontal" :model="newdicForm"  ref="newdicForm">
                 <v-row>

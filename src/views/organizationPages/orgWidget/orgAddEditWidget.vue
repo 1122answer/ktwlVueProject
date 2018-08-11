@@ -1,6 +1,6 @@
 <template>
     <div id="addOrgDiag">
-        <v-modal title="机构信息" :visible="isOrg" @ok="handleOk" @cancel="handleCancel" :width="1050" :confirmLoading="rolebutstate">
+        <v-modal title="机构信息" :visible="isOrg" @ok="handleOk" @cancel="handleCancel" :width="1050" :confirmLoading="rolebutstate" :maskClosable="false">
             <v-form direction="horizontal" :model="orgForm" :rules="rules" ref="orgForm">
                 <v-row>
                     <v-col span='8'>

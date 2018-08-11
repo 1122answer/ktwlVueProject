@@ -1,6 +1,6 @@
 <template>
-    <div id="messageManage">
-        <v-row class="padding-bottom-10">
+    <div id="messageManage" class="moduleWrap">
+        <v-row class="nav-header">
             <v-col span="12">
                 <h1>消息管理</h1>
             </v-col>
@@ -12,78 +12,78 @@
                 </v-breadcrumb>
             </v-col>
         </v-row>
-        <div class="box-border padding-10">
-            <div class="clearfix padding-bottom-5">
-                <div class="list-org-box">
-                    <v-more-panel v-show="searchMsgFlag">
-                          <v-form slot="form">
-                            <v-form-item label="消息标题">
-                                <v-input placeholder="请输入消息标题" v-model="searchForm.title"></v-input>
-                            </v-form-item>
-                            <v-form-item label="所属业务">
-                                <v-input type="text" placeholder="请输入所属业务名称" v-model="searchForm.busiId"></v-input>
-                            </v-form-item>
-                            <v-form-item label="消息类型">
-                                <v-select style="width: 100px;" :data="messageType" v-model="searchForm.messageType" placeholder="请选择"></v-select>
-                            </v-form-item>
-                            <v-form-item label="撤销状态">
-                                <v-select style="width: 100px;" :data="revokeStatus" v-model="searchForm.isRevoke" placeholder="请选择"></v-select>
-                            </v-form-item>
-                        </v-form>
-                        <v-button slot="control" size="large" type="primary" html-type="button" icon="search" @click="searchlist">查询
-                        </v-button>
-                        <v-button  type="primary" size="large" class="pull-right" @click="addMsg" style="margin-top:2px;">
-                            <v-icon type="plus"></v-icon> 新增</v-button>
-                        </v-button> 
-                    </v-more-panel>
-                    <v-more-panel v-show="searchMsgPushFlag">
-                       <h2 slot="form">发送对象共{{totalCount}}位，目前有{{viewCount}}位已查看</h2>
-                       <v-button type="primary" size="large" class="pull-right" @click="closeMsgPush" style="margin-top:2px;">
-                            返回
-                        </v-button> 
-                    </v-more-panel>
-                    <v-data-table :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small" class="margin-top-15" bordered ref="msgTable" v-show="msgManageFlag" emptyText="暂时找不到你要的信息......">
-                        <template slot="td" slot-scope="props">
-                            <div v-if="props.column.field==='isRevoke'">
+        <div class="box-border " ref="boxBorder">
+            <div  ref="morePanelWrap">
+                <v-more-panel v-show="searchMsgFlag">
+                        <v-form slot="form">
+                        <v-form-item label="消息标题">
+                            <v-input placeholder="请输入消息标题" v-model="searchForm.title"></v-input>
+                        </v-form-item>
+                        <v-form-item label="所属业务">
+                            <v-input type="text" placeholder="请输入所属业务名称" v-model="searchForm.busiId"></v-input>
+                        </v-form-item>
+                        <v-form-item label="消息类型">
+                            <v-select style="width: 100px;" :data="messageType" v-model="searchForm.messageType" placeholder="请选择"></v-select>
+                        </v-form-item>
+                        <v-form-item label="撤销状态">
+                            <v-select style="width: 100px;" :data="revokeStatus" v-model="searchForm.isRevoke" placeholder="请选择"></v-select>
+                        </v-form-item>
+                    </v-form>
+                    <v-button slot="control" size="large" type="primary" html-type="button" icon="search" @click="searchlist">查询
+                    </v-button>
+                    <v-button  type="primary" size="large" class="pull-right" @click="addMsg" style="margin-top:2px;">
+                        <v-icon type="plus"></v-icon> 新增</v-button>
+                    </v-button> 
+                </v-more-panel>
+                <v-more-panel v-show="searchMsgPushFlag">
+                    <h2 slot="form">发送对象共{{totalCount}}位，目前有{{viewCount}}位已查看</h2>
+                    <v-button type="primary" size="large" class="pull-right" @click="closeMsgPush" style="margin-top:2px;">
+                        返回
+                    </v-button> 
+                </v-more-panel>
+            </div>
+                <div class="container-fluid" ref="containerFluid">
+                <v-data-table :data='loadData' :responseParamsName="responseParamsName" :columns='columns' size="small"  bordered ref="msgTable" v-show="msgManageFlag" emptyText="暂时找不到你要的信息......">
+                    <template slot="td" slot-scope="props">
+                        <div v-if="props.column.field==='isRevoke'">
+                            <span v-if="props.content==false">
+                                    否
+                                </span>
+                            <span v-else>
+                                    是
+                                </span>
+                        </div>
+                        <div v-else-if="props.column.field=='messageType'">
+                            <span v-if="props.content==0">系统消息</span>
+                            <span v-else-if="props.content==1">业务消息</span>
+                            <span v-else-if="props.content==2">通知公告</span>
+                        </div>
+                        <div v-else-if="props.column.field=='operation'" class="text-center">
+                            <v-button-group>
+                                <v-button type="primary" title="查看消息详情" @click="showDetail(props.item)">
+                                    <v-icon type="file-text"></v-icon>
+                                </v-button>
+                                <v-button type="primary" title="查看发送对象" @click="showPushMsgs(props.item)">
+                                    <v-icon type="team"></v-icon>
+                                </v-button>
+                            </v-button-group>
+                        </div>
+                        <span v-else v-html="props.content"></span>
+                    </template>
+                </v-data-table>
+                <v-data-table :data='loadPushData' :responseParamsName="responseParamsName" :columns='pushcolumns' size="small" class="margin-top-15" bordered ref="msgpushTable" v-show="msgPushManageFlag">
+                    <template slot="td" slot-scope="props">
+                            <div v-if="props.column.field==='isView'">
                                 <span v-if="props.content==false">
-                                      否
-                                  </span>
+                                    否
+                                </span>
                                 <span v-else>
-                                      是
-                                  </span>
+                                    是
+                                </span>
                             </div>
-                            <div v-else-if="props.column.field=='messageType'">
-                                <span v-if="props.content==0">系统消息</span>
-                                <span v-else-if="props.content==1">业务消息</span>
-                                <span v-else-if="props.content==2">通知公告</span>
-                            </div>
-                            <div v-else-if="props.column.field=='operation'" class="text-center">
-                                <v-button-group>
-                                    <v-button type="primary" title="查看消息详情" @click="showDetail(props.item)">
-                                        <v-icon type="file-text"></v-icon>
-                                    </v-button>
-                                    <v-button type="primary" title="查看发送对象" @click="showPushMsgs(props.item)">
-                                        <v-icon type="team"></v-icon>
-                                    </v-button>
-                                </v-button-group>
-                            </div>
-                            <span v-else v-html="props.content"></span>
-                        </template>
-                    </v-data-table>
-                    <v-data-table :data='loadPushData' :responseParamsName="responseParamsName" :columns='pushcolumns' size="small" class="margin-top-15" bordered ref="msgpushTable" v-show="msgPushManageFlag">
-                        <template slot="td" slot-scope="props">
-                             <div v-if="props.column.field==='isView'">
-                                  <span v-if="props.content==false">
-                                      否
-                                  </span>
-                                  <span v-else>
-                                      是
-                                  </span>
-                             </div>
-                            <span v-else v-html="props.content"></span>
-                        </template>
-                    </v-data-table>
-                </div>
+                        <span v-else v-html="props.content"></span>
+                    </template>
+                </v-data-table>
             </div>
         </div>
         <MsgWidget :is-msg="msgShow" @ok="hideMsgOk" @cancel="hideMsgDialog"></MsgWidget>

@@ -18,6 +18,7 @@ import orgInfoViewModule from './modules/orgStore/orgInfoViewStore.js' //机构�
 import departmentModule from './modules/deptStore/departmentStore' //部门
 import bindUserModule from './modules/deptStore/bindUserStore' //部门绑定用户
 import deptRoleModule from './modules/deptStore/deptRoleStore.js' //部门绑定角色
+import viewDeptInfoModule from './modules/deptStore/viewDepartmentInfoStore.js' //部门信息查看
 
 import permissionModule from './modules/permissionStore/permissionStore.js' //权限管理数据相关
 import CatalogAddModule from './modules/permissionStore/CatalogAdd.js' //权限管理添加一级菜单
@@ -68,11 +69,13 @@ import dicAddModule from './system/dictionaryMagStore/dicAddStore.js' //参数�
 import msgMagModule from './message/messageMagStore/messageStore.js'
 import msgAddEditModule from './message/messageMagStore/msgAddEditStore.js' //消息新增和修改
 
-//=======要件管理=========
+//=======系统业务=========
 import enclosureListModule from './enclosure/enclosureManageStore/enclosureListStore.js'    //要件列表
 import enclosureAddModule from './enclosure/enclosureManageStore/enclosureAddStore.js'    //要件列表
 import copyedRegionModule from './enclosure/enclosureManageStore/copyedRegion.js'    //复制区域
 import copyedGroupModule from './enclosure/enclosureManageStore/copyedGroup.js'    //复制分组
+import businessListModule from './enclosure/businessManageStore/businessListStore.js'
+import businessAddModule from './enclosure/businessManageStore/businessAddStore.js'
 
 //=======房屋信息=========
 import houseManageModule from './houseManage/houseManageStore.js'
@@ -94,6 +97,8 @@ import scriptVariableAddModule from './scriptVariable/scriptVariableAddStore.js'
 
 import commonSelect from './common/commonSelect.js' //行政区划下拉树
 import globalPermissonModule from './common/globalPermission.js'
+
+
 
 
 Vue.use(Vuex)
@@ -148,6 +153,7 @@ export default new Vuex.Store({
         departmentModule,
         bindUserModule,
         deptRoleModule,
+        viewDeptInfoModule,
 
         userListModule,
         userAddEditModule,
@@ -201,5 +207,8 @@ export default new Vuex.Store({
         ////////////////公共组件
         commonSelect,
         globalPermissonModule,
+        //业务管理
+        businessListModule,
+        businessAddModule,
     }
 })

@@ -1,85 +1,83 @@
 <template>
-    <div id="permissionsManage">
-        <!-- 添加权限与菜单弹窗 -->
-        <preAdd :visible="visible" @ok="handleOk" @cancel="handleCancel"></preAdd>
-        <!-- 添加目录弹窗 -->
-        <Catalog :visible="catalogAlert" @ok="catalogOk" @cancel="catalogCancel"> </Catalog>
-        <permissionDetails :visible="details" @ok="detailsOk" @hide="detailsCancel"></permissionDetails>
-        <v-row class="padding-bottom-10">
+    <div id="permissionsManage" class="moduleWrap">
+        <v-row class="nav-header">
             <v-col span="12">
-                <h1 @click="demoClick">权限管理</h1>
+                <h1>权限管理</h1>
             </v-col>
             <v-col span="12">
-                <v-breadcrumb class="pull-right" :style="{ 'line-height': '38px'}">
+                <v-breadcrumb class="pull-right" :style="{ 'line-height': '30px'}">
                     <v-breadcrumb-item>首页</v-breadcrumb-item>
                     <v-breadcrumb-item>组织机构</v-breadcrumb-item>
                     <v-breadcrumb-item>权限管理</v-breadcrumb-item>
                 </v-breadcrumb>
             </v-col>
         </v-row>
-        <div class="box-border padding-10">
-            <div class="clearfix padding-bottom-5">
-                <div class="list-org-box" v-show='listFlag'>
-                    <v-row :gutter="16">
-                        <v-col span="4">
-                            <v-select search :style="{width:'100%'}" size="lg"></v-select>
-                        </v-col>
-                        <v-col span="6">
-                            <v-input-group compact>
-                                <v-input v-model="words" placeholder="请输入权限名称" size="large" :style="{width:'64%'}"></v-input>
-                                <v-button @click="search" type="primary" size="large">
-                                    <v-icon type="search"></v-icon> 查询
+        <div class="box-border" ref="boxBorder">
+            <div ref="morePanelWrap">
+                <v-more-panel>
+                    <v-form slot="form">
+                        <v-form-item>
+                            <v-select search :style="{width:'200px'}" size="lg"></v-select>
+                        </v-form-item>
+                        <v-form-item>
+                            <v-input v-model="words" placeholder="请输入权限名称" size="large" :style="{width:'200px'}"></v-input>
+                        </v-form-item>
+                    </v-form>
+                    <v-button @click="search" type="primary" size="large" slot="control" style="margin-top: -2px;">
+                        <v-icon type="search"></v-icon> 查询
+                    </v-button>
+                    <v-button type="primary" @click="addCatalogDiag" class="margin-right-5 pull-right" size="large">
+                        <v-icon type="folder-add"></v-icon> 添加目录</v-button>
+                    <v-button type="primary" @click="addListDiag" class="pull-right" size="large">
+                        </v-icon>添加权限模块</v-button>
+                </v-more-panel>
+            </div>
+            <div class="container-fluid" ref="containerFluid">
+                <v-data-table ref="PerTable" size="small" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' bordered :treeOption='treeOption' tree-table :pagination="false" emptyText="暂时找不到你要的信息......" :height="tableBoxHeight">
+                    <template slot="td" slot-scope="props">
+                        <div v-if="props.column.field=='operation'" class="text-center">
+                            <v-button-group v-if="props.item.flag=='1'">
+                                <v-button type="primary" title="查看详情" @click="showDetails(props.item)">
+                                    <v-icon type="file-text"></v-icon>
                                 </v-button>
-                            </v-input-group>
-                        </v-col>
-                        <v-col span="10" class="pull-right text-right">
-                            <v-button type="primary" @click="addCatalogDiag" class="margin-right-5">
-                                <v-icon type="folder-add"></v-icon> 添加目录</v-button>
-                            <v-button type="primary" @click="addListDiag" class="margin-right-5">
-                                <v-icon type="plus"></v-icon>添加权限模块</v-button>
-                        </v-col>
-                    </v-row>
-                    <v-data-table ref="PerTable" size="small" :data='loadData' :responseParamsName="responseParamsName" :columns='columns' class="margin-top-15" bordered :treeOption='treeOption' tree-table :pagination="false" emptyText="暂时找不到你要的信息......">
-                        <template slot="td" slot-scope="props">
-                            <div v-if="props.column.field=='operation'" class="text-center">
-                                <v-button-group v-if="props.item.flag=='1'">
-                                    <v-button type="primary" title="查看详情" @click="showDetails(props.item)">
-                                        <v-icon type="file-text"></v-icon>
-                                    </v-button>
-                                    <v-button type="primary" title="新增目录" @click="CatalogItemDiag(props.item)">
-                                        <v-icon type="folder-add"></v-icon>
-                                    </v-button>
-                                    <v-button type="primary" title="新增权限" @click="addItemDiag(props.item)">
-                                        <v-icon type="plus"></v-icon>
-                                    </v-button>
-                                    <v-button type="primary" title="编辑" @click="editCatalog(props.item)">
-                                        <v-icon type="edit"></v-icon>
-                                    </v-button>
-                                    <v-button type="error" title="删除" @click="deletelist(props.item)">
-                                        <v-icon type="delete"></v-icon>
-                                    </v-button>
-                                </v-button-group>
-                                <v-button-group v-if="props.item.flag!='1'">
-                                    <v-button type="primary" title="编辑" @click="editoperssion(props.item)">
-                                        <v-icon type="edit"></v-icon>
-                                    </v-button>
-                                    <v-button type="error" title="删除" @click="deletelist(props.item)">
-                                        <v-icon type="delete"></v-icon>
-                                    </v-button>
-                                </v-button-group>
-                            </div>
-                            <div v-else-if="props.column.field === 'enabled'" class="text-center">
-                                <v-switch v-model="props.content" @change="changeEnabled(props.content,props.item)">
-                                    <span slot="checkedChildren">开</span>
-                                    <span slot="unCheckedChildren">关</span>
-                                </v-switch>
-                            </div>
-                            <span v-else v-html="props.content"></span>
-                        </template>
-                    </v-data-table>
-                </div>
+                                <v-button type="primary" title="新增目录" @click="CatalogItemDiag(props.item)">
+                                    <v-icon type="folder-add"></v-icon>
+                                </v-button>
+                                <v-button type="primary" title="新增权限" @click="addItemDiag(props.item)">
+                                    <v-icon type="plus"></v-icon>
+                                </v-button>
+                                <v-button type="primary" title="编辑" @click="editCatalog(props.item)">
+                                    <v-icon type="edit"></v-icon>
+                                </v-button>
+                                <v-button type="error" title="删除" @click="deletelist(props.item)">
+                                    <v-icon type="delete"></v-icon>
+                                </v-button>
+                            </v-button-group>
+                            <v-button-group v-if="props.item.flag!='1'">
+                                <v-button type="primary" title="编辑" @click="editoperssion(props.item)">
+                                    <v-icon type="edit"></v-icon>
+                                </v-button>
+                                <v-button type="error" title="删除" @click="deletelist(props.item)">
+                                    <v-icon type="delete"></v-icon>
+                                </v-button>
+                            </v-button-group>
+                        </div>
+                        <div v-else-if="props.column.field === 'enabled'" class="text-center">
+                            <v-switch v-model="props.content" @change="changeEnabled(props.content,props.item)">
+                                <span slot="checkedChildren">开</span>
+                                <span slot="unCheckedChildren">关</span>
+                            </v-switch>
+                        </div>
+                        <span v-else v-html="props.content"></span>
+                    </template>
+                </v-data-table>
             </div>
         </div>
+        <!-- 添加权限与菜单弹窗 -->
+        <preAdd :visible="visible" @ok="handleOk" @cancel="handleCancel"></preAdd>
+        <!-- 添加目录弹窗 -->
+        <Catalog :visible="catalogAlert" @ok="catalogOk" @cancel="catalogCancel"> </Catalog>
+        <permissionDetails :visible="details" @ok="detailsOk" @hide="detailsCancel"></permissionDetails>
     </div>
 </template>
 <script>
@@ -101,14 +99,20 @@ export default {
         // ...mapState({
         // }),
     },
+    mounted() {
+        //给table限制最大高度
+        this.$nextTick(() => {
+            let tableBoxHeight = this.$refs.boxBorder.scrollHeight - (this.$refs.morePanelWrap.scrollHeight + 18);
+            this.tableBoxHeight = tableBoxHeight;
+        });
+    },
     data: () => ({
+        tableBoxHeight: 300,
         switch: null,
         catalogAlert: false,
         details: false,
         words: '',
-        name: "permissionsManage",
         visible: false,
-        listFlag: true,
         changeModel: false,
         responseParamsName: {
             total: 'totalCount',

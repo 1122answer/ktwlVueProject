@@ -1,5 +1,5 @@
 <template>
-    <v-modal title="绑定角色" :visible="isRole" :width=800 @ok="handleOk" @cancel="handleCancel" :confirm-loading="asyncConfirmLoading">
+    <v-modal title="绑定角色" :visible="isRole" :width=800 @ok="handleOk" @cancel="handleCancel" :confirm-loading="asyncConfirmLoading" :maskClosable="false">
         <div style="max-height: 600px;overflow-y: auto;">
             <p class="text-md text-primary">请为用户 “{{userName}}” 勾选角色，然后点击“确定”。</p>
             <div class="widgetWrap">

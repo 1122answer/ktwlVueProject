@@ -1,6 +1,6 @@
 <template>
     <div id="addMsgDiag">
-        <v-modal title="发送消息" :visible="true" v-show="isMsg" @ok="handleOk" @cancel="handleCancel" :width="1050" :confirm-loading="asyncConfirmLoading">
+        <v-modal title="发送消息" :visible="true" v-show="isMsg" @ok="handleOk" @cancel="handleCancel" :width="1050" :confirm-loading="asyncConfirmLoading" :maskClosable="false">
             <v-form direction="horizontal" :model="msgForm" ref="msgForm" :rules="rules">
                 <v-row>
                     <v-col span='8'>

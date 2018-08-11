@@ -269,6 +269,7 @@ export const router = {
         status:'sc/scripttype/status',// 根据id设置脚本分类启用状态
         update:'sc/scripttype/update',// 更新脚本分类
     },
+    //脚本变量接口
     scriptVariable:{
         add:'sc/scriptvariable/add',// 添加脚本变量
         batchdelete:'sc/scriptvariable/batchdelete',//批量删除脚本变量
@@ -277,6 +278,16 @@ export const router = {
         getlist:'sc/scriptvariable/getlist',// 获取脚本分类变量列表
         getpagelist:"sc/scriptvariable/getpagelist",// 获取脚本分类变量分页列表
         update:"sc/scriptvariable/update",// 更新脚本变量
+    },
+    //业务管理接口
+    business:{
+        add:'/sys/business/add',//添加业务
+        batchdelete:'/sys/business/batchdelete',//批量删除业务
+        delete:'/sys/business/delete',//删除业务
+        getbusiness:'/sys/business/get',//根据id获取业务配置
+        getpagelist:'/sys/business/getpagelist',//业务分页查询
+        update:'/sys/business/update',//更新业
+        
     }
 
 }

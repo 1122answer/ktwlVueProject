@@ -5,13 +5,13 @@ export default {
     namespaced: true,
     state: {
         serchform:{
-            title:"",
-            cconfigType :"",
-            fileType :"",
-            isEnabled :"",
-            regionCode:"",
-            systemId:"",
-            groupId:""
+            title:null,
+            cconfigType :null,
+            fileType :null,
+            isEnabled :null,
+            regionCode:null,
+            systemId:null,
+            groupId:null
         },
     },
     actions: {

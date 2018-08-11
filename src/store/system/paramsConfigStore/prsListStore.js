@@ -6,14 +6,14 @@ export default {
     namespaced: true,
     state: {
         searchForm: {
-            groupName: '',
-            configKey: '',
-            configName: '',
-            configDesc: '',
-            isEnabled: '',
-            systemId: '',
-            regionCode: '',
-            groupId: '',
+            groupName: null,
+            configKey: null,
+            configName: null,
+            configDesc: null,
+            isEnabled: null,
+            systemId:null,
+            regionCode:null,
+            groupId:null,
         },
         treeData: []
     },
@@ -65,6 +65,12 @@ export default {
         INIT_FORM_DATA(state, data) {
         },
         SELECT_TREE_NODE(state, data) {
+            if (data==""||data==null||data==undefined) {
+                state.searchForm.groupId = null;
+                state.searchForm.regionCode = null;
+                state.searchForm.systemId = null;
+                return
+            }
             state.searchForm.groupId = data.groupId;
             if (data.regionCode == "common_area") {
                 state.searchForm.regionCode = '';
@@ -76,7 +82,7 @@ export default {
             } else {
                 state.searchForm.systemId = data.systemId;
             }
-        }
+        },
     },
     //getters: {}
 };

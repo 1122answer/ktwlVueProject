@@ -1,5 +1,5 @@
 <template>
-	<v-modal title="绑定角色" :visible="visible" @cancel="handleCancel">
+	<v-modal title="绑定角色" :visible="visible" @cancel="handleCancel" :maskClosable="false">
 		<p class="text-md text-primary" v-text="textTip"></p>
 		<div class="widgetWrap">
 			<v-tree :data="treeData" checkable multiple @check="checkFn"></v-tree>
